@@ -170,7 +170,7 @@ run2perdiff34 <- run2[34,6:45]
 #
 perdiff2.1 <- run2 %>%
   mutate(pct_diff = (Profit/lead(Profit) - 1) * 100)
-
+    
 
 
 #SRM
@@ -245,3 +245,8 @@ samples.cen <- samples.full %>%
   mutate(pb_cen = ifelse(pb_raw < mdl$pb,
                          0.5*mdl$pb,
                          pb_raw))
+
+# Messing around with your code. MWAHAHAHAHAHAHA!
+a;lkjsf;lkjdsf
+kdkkjdjdfj
+askdjflkdsaflkjfds
