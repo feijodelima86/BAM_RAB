@@ -198,6 +198,9 @@ SAMPLES <- prunedSAMPLE_MASTER %>%
 
 write.csv(SAMPLES,"2_incremental\\20220307_FIELD_SAMPLES.csv", row.names = FALSE)
 
+
+
+
 ### Inital QAQC tests ----
 
 
@@ -222,37 +225,41 @@ perdiff2.1 <- run2 %>%
 
 #elements that have multiple beamlines Al(2), B(2), Fe(3), Mn(2), S(3), Si(3), Tl(2), Zn(2)
 
+
 ###calculate MDLs
 
-#combine all MDLs from different runs
+# load in QAQC data
+qaqc.samples <- as.data.frame(read.csv(file.path("./2_incremental","20220307_QAQC_SAMPLES.csv"), header=T, na.strings = c("")))
 
-mdl.master <- rbind(MDL.run1,MDL.run3)
 
-#get rid of labeling columns leaving only element columns
+#select Digestion blank
+blanks <- qaqc.samples %>% filter(SAMPLE_DESCRIPTOR == "DIGEST BLANK")
 
-mdl.master <- mdl.master[, c(6:45)]
+#17 blanks
 
 #calculate MDL off of digestion blanks MDL= students t-value (99% CI for n-1 DF)*standard deviation. t value is 3.14 for 7 replicates
 
-#students t-test value for number of blanks used 
 #DF is number of rows -1
-tvalue <- qt(.99,df=(length(mdl.master[ ,1])-1))
+
+#automate with R's quantile function and the number or rows in dataframe
+tvalue <- qt(.99,df=(length(blanks[ ,1])-1))
+#hard calculation t value is 2.583 for n=17 (df=16) double check automate worked
+
 
 #standard deviation blanks across of all elements and beam lines
-mdl.master.calc<-mdl.master %>%
+blanks.stdev <- blanks[,3:41] %>%
   summarise_all(sd)
 
 #rotate data frame to calc mdl
-
-long.mdl <- pivot_longer(mdl.master.calc,cols = everything(), names_to = "element", values_to = "stdev")
+long.stdev <- pivot_longer(blanks.stdev,cols = everything(), names_to = "element", values_to = "stdev")
 
 #calc mdl
-long.mdl.calc <-long.mdl %>%
+long.mdl <-long.stdev %>%
   mutate(mdl = stdev*tvalue)
 
 #rotate dataframe back 
 
-mdl.full <- long.mdl.calc %>%
+mdl <- long.mdl %>%
   pivot_wider(id_cols=c(1,3),names_from = "element", values_from = "mdl")
 
 #select beamlines based on lowest
@@ -262,21 +269,49 @@ mdl.full <- long.mdl.calc %>%
 
 ### Censor data based on calculated MDL values ----
 
-#combine sample data
-samples.full <- rbind(sample1,sample2,sample3,sample4)
+#make a list of all elements
+#a <- c(Al,	Al_r,	As,	B,	B_r, 	Ba,	Be,	Ca_r,	Cd,	Co,	Cr, Cu, Fe,	Fe_r238 ,	Fe_r234 ,	K_r,	Li_r,	Mg_r,	Mn ,	Mn_r ,	Mo,	Na_r ,	Ni ,	P ,	Pb ,	S181 ,	S_r,	S180,	Sb ,	Se ,	Si, Si_r251, Si_r212, Sn, Sr_r, Ti, Tl, Zn, Zn_r )
 
-# censor data based off calculated MDL 
+a <-c("Al",	"Al_r",	"As",	"B",	"B_r", 	"Ba",	"Be",	"Ca_r",	"Cd",	"Co",	"Cr", "Cu", "Fe",	"Fe_r238" ,	"Fe_r234" ,	"K_r",	"Li_r",	"Mg_r",	"Mn" ,	"Mn_r" ,	"Mo",	"Na_r" ,	"Ni" ,	"P" ,	"Pb" ,	"S181" ,	"S_r",	"S180",	"Sb" ,	"Se" ,	"Si","Si_r251","Si_r212","Sn","Sr_r","Ti","Tl","Zn","Zn_r" )
 
-samples.cen <- samples.full %>%
-  mutate(as_cen = ifelse(as_raw < mdl$as,
+
+for (i in a) {
+  mdl.censored.samples <- SAMPLES[,3:41] %>%
+    mutate_("i_cen = ifelse(i < mdl$i,
+                           0.5*mdl$i,
+                           i)") 
+  
+}
+
+
+
+
+# Create example data frame
+df <- data.frame(c(1, 2, 3, 4, 5, 6, 7))
+colnames(df) <- c("var")
+
+# Your sequence of exponents
+alpha <- seq(0.85, 0.95, by= .01)
+
+# Call to the function, assign the return value to df2
+df2 <- dblExponential(alpha,df$var)
+
+# print df2
+df2
+
+SAMPLES_CENSORED <- ()
+
+
+samples.limit <- SAMPLES %>%
+  mutate(As_cen = ifelse(as_raw < mdl$As,
                          0.5*mdl$as,
-                         as_raw)) %>%
+                         As)) %>%
   mutate(cd_cen = ifelse(cd_raw < mdl$cd,
-                         0.5*mdl$cd,
-                         cd_raw)) %>%
+                         0.5*mdl$Cd,
+                         Cd)) %>%
   mutate(cu_cen = ifelse(cu_raw < mdl_$cu,
-                         0.5*mdl$cu,
-                         cu_raw)) %>%
+                         0.5*mdl$Cu,
+                         Cu_raw)) %>%
   mutate(zn_cen = ifelse(zn_raw < mdl$zn,
                          0.5*mdl$zn,
                          zn_raw)) %>%
@@ -284,9 +319,10 @@ samples.cen <- samples.full %>%
                          0.5*mdl$pb,
                          pb_raw))
 
-# Messing around with your code. MWAHAHAHAHAHAHA!
-a;lkjsf;lkjdsf
-kdkkjdjdfj
-askdjflkdsaflkjfds
 
+
+
+
+
+# Messing around with your code. MWAHAHAHAHAHAHA!
 go plot yourself!!!!
