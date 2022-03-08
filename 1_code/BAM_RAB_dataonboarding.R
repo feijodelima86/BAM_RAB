@@ -32,7 +32,7 @@ run5 <- as.data.frame(read.csv(file.path("./0_data/parsed_icp_data","BAAMBiomass
 run6 <- as.data.frame(read.csv(file.path("./0_data/parsed_icp_data","BAAMBiomass2_update.csv"), header=T, na.strings = c("")))
 run7 <- as.data.frame(read.csv(file.path("./0_data/parsed_icp_data","BAAMBiomass3_update.csv"), header=T, na.strings = c("")))
 
-
+### Change data types, names, and remove calibration standards ----
 
 #rename columns and elements 
 colnames(run1) <- c("SAMPLE_ID",	"ICP_DATE",	"TIME",	"Remarks",	"RUN_NUMBER", "Al",	"Al_r",	"As",	"B",	"B_r", 	"Ba",	"Be",	"Ca_r",	"Cd",	"Co",	"Cr", "Cu", "Fe",	"Fe_r238" ,	"Fe_r234" ,	"K_r",	"Li_r",	"Mg_r",	"Mn" ,	"Mn_r" ,	"Mo",	"Na_r" ,	"Ni" ,	"P" ,	"Pb" ,	"S181" ,	"S_r",	"S180",	"Sb" ,	"Se" ,	"Si","Si_r251","Si_r212","Sn","Sr_r","Ti","Tl","Zn","Zn_r" 
@@ -90,46 +90,46 @@ class(ICP_samples)
 
 # is data frame but as.numeric doesn't like me and thinks its a list when I pipeline ----
 
-ICP_samples <- ICP_samples %>% 
-  as.numeric("Al") %>%
-  as.numeric("Al_r")%>%
-  as.numeric("As")%>%
-  as.numeric("B")%>%
-  as.numeric("B_r")%>%
-  as.numeric("Ba")%>%
-  as.numeric("Be")%>%
-  as.numeric("Ca_r")%>%
-  as.numeric("Cd")%>%
-  as.numeric("Co")%>%
-  as.numeric("Cr")%>%
-  as.numeric("Cu")%>%
-  as.numeric("Fe")%>%
-  as.numeric("Fe_r238")%>%
-  as.numeric("Fe_r234")%>%
-  as.numeric("K_r")%>%
-  as.numeric("Li_r")%>%
-  as.numeric("Mg_r")%>%
-  as.numeric("Mn")%>%
-  as.numeric("Mn_r")%>%
-  as.numeric("Mo")%>%
-  as.numeric("Na_r")%>%
-  as.numeric("Ni")%>%
-  as.numeric("P")%>%
-  as.numeric("Pb")%>%
-  as.numeric("S180")%>%
-  as.numeric("S181")%>%
-  as.numeric("S_r")%>%
-  as.numeric("Sb")%>%
-  as.numeric("Se")%>%
-  as.numeric("Si")%>%
-  as.numeric("Si_r251")%>%
-  as.numeric("Si_r212")%>%
-  as.numeric("Sn")%>%
-  as.numeric("Sr_r")%>%
-  as.numeric("Ti")%>%
-  as.numeric("Tl")%>%
-  as.numeric("Zn")%>%
-  as.numeric("Zn_r")
+#ICP_samples <- ICP_samples %>% 
+ # as.numeric("Al") %>%
+  #as.numeric("Al_r")%>%
+  #as.numeric("As")%>%
+  #as.numeric("B")%>%
+  #as.numeric("B_r")%>%
+  #as.numeric("Ba")%>%
+  #as.numeric("Be")%>%
+  #as.numeric("Ca_r")%>%
+  #as.numeric("Cd")%>%
+  #as.numeric("Co")%>%
+  #as.numeric("Cr")%>%
+  #as.numeric("Cu")%>%
+  #as.numeric("Fe")%>%
+  #as.numeric("Fe_r238")%>%
+  #as.numeric("Fe_r234")%>%
+  #as.numeric("K_r")%>%
+  #as.numeric("Li_r")%>%
+  #as.numeric("Mg_r")%>%
+  #as.numeric("Mn")%>%
+  #as.numeric("Mn_r")%>%
+  #as.numeric("Mo")%>%
+  #as.numeric("Na_r")%>%
+  #as.numeric("Ni")%>%
+  #as.numeric("P")%>%
+  #as.numeric("Pb")%>%
+  #as.numeric("S180")%>%
+  #as.numeric("S181")%>%
+  #as.numeric("S_r")%>%
+  #as.numeric("Sb")%>%
+  #as.numeric("Se")%>%
+  #as.numeric("Si")%>%
+  #as.numeric("Si_r251")%>%
+  #as.numeric("Si_r212")%>%
+  #as.numeric("Sn")%>%
+  #as.numeric("Sr_r")%>%
+  #as.numeric("Ti")%>%
+  #as.numeric("Tl")%>%
+  #as.numeric("Zn")%>%
+  #as.numeric("Zn_r")
 
 
 #instead select columns----
@@ -139,29 +139,67 @@ ICP_samples[,6:44] <- lapply(ICP_samples[,6:44], as.numeric) #these are the colu
 #check transformation
 summary(ICP_samples)
 
+### Merge concentration data with sample information and masses----
+
+#load in sample information, masses are already attached
+info_mass <- as.data.frame(read.csv(file.path("./0_data/sample_mass","20220307_SAMPLE_LOG_MASS.csv"), header=T, na.strings = c("")))
+
+#column types need to be identical to join
+summary(info_mass)
+
+summary(ICP_samples)
+
+#change Run number to character as its descriptive
+ICP_samples$RUN_NUMBER <- as.character(ICP_samples$RUN_NUMBER) 
+
+#change ICP_Number to character as itsdescriptive
+info_mass$ICP_NUMBER <- as.character(info_mass$ICP_NUMBER)
+
+
+#Check transformation
+summary(ICP_samples)
+summary(info_mass)
+
+#join sample information to ICP concentrations
+SAMPLE_MASTER <- left_join(ICP_samples, info_mass, by = c( "ICP_DATE" = "OES_DATE", "SAMPLE_ID" = "ICP_NUMBER"), keep = TRUE )
+
+#Inspect new file to make sure there are no columns with .y and .x which indicates incomplete merge
+#is oldest ICP date corresponing to a sampling date of 6/22
+
+
+#identify column numbers
+summary(SAMPLE_MASTER)
+#Remove unneeded columns
+prunedSAMPLE_MASTER <- select(SAMPLE_MASTER,c(SAMPLE_ID, ICP_DATE, Al:Zn_r, SAMPLING_DATE:OES_DATE, ICP_NUMBER, LAB.DUPLICATE:ICP.SPIKE, DRY_MASS, NOTES))
+
+
 ### filter QAQC samples----
 
-QAQC_samples <- ICP_samples %>%
-  filter(SAMPLE_ID == "CCV" | SAMPLE_ID == "CV" | SAMPLE_ID == "S IPC" | SAMPLE_ID == "Lblank" | SAMPLE_ID == "LFB" | SAMPLE_ID == "cal std 1" | SAMPLE_ID == "cal std 5" | SAMPLE_ID == "cal blank")
+QAQC_samples <- prunedSAMPLE_MASTER %>%
+  filter(SAMPLE_ID == "CCV" | SAMPLE_ID == "CV" | SAMPLE_ID == "S IPC" | SAMPLE_ID == "Lblank" | SAMPLE_ID == "LFB" | SAMPLE_ID == "cal std 1" | SAMPLE_ID == "cal std 5" | SAMPLE_ID == "cal blank" | SAMPLE_DESCRIPTOR == "STSD2" | SAMPLE_DESCRIPTOR == "METHOD FORTIFIED BLANK" | SAMPLE_DESCRIPTOR == "LABORATORY FORTIFIED SAMPLE" | SAMPLE_DESCRIPTOR == "DIGEST BLANK" | SAMPLE_DESCRIPTOR == "FILTER BLANK" | SAMPLE_ID == "MFB 1.1" | SAMPLE_ID == "MFB 1.8" | SAMPLE_ID == "MFB 2.1" | SAMPLE_ID == "MFB 2.8")
 
-duplicates <- ICP_samples %>% 
+#save off QAQC file to incremental
+write.csv(QAQC_samples,"2_incremental\\20220307_QAQC_SAMPLES.csv", row.names = FALSE)
+
+
+duplicates <- prunedSAMPLE_MASTER %>% 
   filter(grepl("dup$",SAMPLE_ID )) #grepl searches for string matches in the vector $ goes after for ends with or before for begins with. This can also be accomplished using strdetect or strsub
 
+SAMPLES <- prunedSAMPLE_MASTER %>%
+  filter(SAMPLE_DESCRIPTOR != "STSD2" ) %>%
+  filter(DRY_MASS != "NA" ) %>%
+  filter(SAMPLE_DESCRIPTOR != "STSD2" ) %>%
+  filter(SAMPLE_DESCRIPTOR != "METHOD FORTIFIED BLANK" ) %>%
+  filter(SAMPLE_DESCRIPTOR != "LABORATORY FORTIFIED SAMPLE" ) %>%
+  filter(SAMPLE_DESCRIPTOR != "DIGEST BLANK" ) %>%
+  filter(SAMPLE_DESCRIPTOR != "FILTER BLANK") 
 
-### read in sample information file
-sample.meta <- read.csv(file.path("./0_data/sample_info","080421_SAMPLE_LOG.csv"),header=T, na.strings = c(""))
+#save off sample file
 
-#join sample metadata and ICP data together
-summary(sample.meta)
-summary(samples.full)
-sample.meta$ICP_NUMBER <-as.character(sample.meta$ICP_NUMBER)
-
-raw_data <- inner_join(sample.meta,samples.full, by = c("ICP_NUMBER"="Sample.ID","ICP_DATE"="Date"))
-
-#check to make sure join was successful
-
+write.csv(SAMPLES,"2_incremental\\20220307_FIELD_SAMPLES.csv", row.names = FALSE)
 
 ### Inital QAQC tests ----
+
 
 #using the original imported files compare analysis stage duplicates.
 run2perdiff33 <- run2[33,6:45]
