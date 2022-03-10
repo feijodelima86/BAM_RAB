@@ -169,9 +169,10 @@ SAMPLE_MASTER <- left_join(ICP_samples, info_mass, by = c( "ICP_DATE" = "OES_DAT
 
 #identify column numbers
 summary(SAMPLE_MASTER)
-#Remove unneeded columns
-prunedSAMPLE_MASTER <- select(SAMPLE_MASTER,c(SAMPLE_ID, ICP_DATE, Al:Zn_r, SAMPLING_DATE:OES_DATE, ICP_NUMBER, LAB.DUPLICATE:ICP.SPIKE, DRY_MASS, NOTES))
+#Remove unneeded columns 
+# RFL: Final version of mass file had column "NOTES" removed and was making line 174 fail. Removed it.
 
+prunedSAMPLE_MASTER <- select(SAMPLE_MASTER,c(SAMPLE_ID, ICP_DATE, Al:Zn_r, SAMPLING_DATE:OES_DATE, ICP_NUMBER, LAB.DUPLICATE:ICP.SPIKE, DRY_MASS))
 
 ### filter QAQC samples----
 
