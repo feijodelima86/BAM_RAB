@@ -184,6 +184,7 @@ write.csv(QAQC_samples,"2_incremental\\20220307_QAQC_SAMPLES.csv", row.names = F
 
 duplicates <- prunedSAMPLE_MASTER %>% 
   filter(grepl("dup$",SAMPLE_ID )) #grepl searches for string matches in the vector $ goes after for ends with or before for begins with. This can also be accomplished using strdetect or strsub
+#apropos french filter
 
 SAMPLES <- prunedSAMPLE_MASTER %>%
   filter(SAMPLE_DESCRIPTOR != "STSD2" ) %>%
@@ -237,7 +238,7 @@ blanks <- qaqc.samples %>% filter(SAMPLE_DESCRIPTOR == "DIGEST BLANK")
 
 #17 blanks
 
-#calculate MDL off of digestion blanks MDL= students t-value (99% CI for n-1 DF)*standard deviation. t value is 3.14 for 7 replicates
+#calculate MDL off of digestion blanks MDL = students t-value (99% CI for n-1 DF)*standard deviation. t value is 3.14 for 7 replicates
 
 #DF is number of rows -1
 
@@ -272,10 +273,9 @@ mdl <- long.mdl %>%
 #make a list of all elements
 #a <- c(Al,	Al_r,	As,	B,	B_r, 	Ba,	Be,	Ca_r,	Cd,	Co,	Cr, Cu, Fe,	Fe_r238 ,	Fe_r234 ,	K_r,	Li_r,	Mg_r,	Mn ,	Mn_r ,	Mo,	Na_r ,	Ni ,	P ,	Pb ,	S181 ,	S_r,	S180,	Sb ,	Se ,	Si, Si_r251, Si_r212, Sn, Sr_r, Ti, Tl, Zn, Zn_r )
 
-a <-c("Al",	"Al_r",	"As",	"B",	"B_r", 	"Ba",	"Be",	"Ca_r",	"Cd",	"Co",	"Cr", "Cu", "Fe",	"Fe_r238" ,	"Fe_r234" ,	"K_r",	"Li_r",	"Mg_r",	"Mn" ,	"Mn_r" ,	"Mo",	"Na_r" ,	"Ni" ,	"P" ,	"Pb" ,	"S181" ,	"S_r",	"S180",	"Sb" ,	"Se" ,	"Si","Si_r251","Si_r212","Sn","Sr_r","Ti","Tl","Zn","Zn_r" )
 
 
-for (i in a) {
+for (i in SAMPLES[,3:41]) {
   mdl.censored.samples <- SAMPLES[,3:41] %>%
     mutate_("i_cen = ifelse(i < mdl$i,
                            0.5*mdl$i,
