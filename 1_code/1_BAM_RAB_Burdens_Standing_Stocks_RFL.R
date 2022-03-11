@@ -1,3 +1,4 @@
+library(tidyverse)
 library(readr)
 library(lubridate) 
 
@@ -54,7 +55,11 @@ STANDING.CROP<-STANDING.CROP %>% reduce(full_join)
 
 #Adding columns with calculated standing crops. Final values are in mg/m2 (mg/g *g/m2)
 
+names(STANDING.CROP)
+
 STANDING.CROP[,c(49:87)]<-STANDING.CROP[,c(10:48)]*STANDING.CROP[,6]
+
+names(STANDING.CROP[,c(49:87)])<-paste(names(STANDING.CROP[,c(49:87)]), "SC")
 
 #CSV output.
 
