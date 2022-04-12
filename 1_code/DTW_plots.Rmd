@@ -1,0 +1,136 @@
+---
+title: "BAAM Plots"
+author: "Dylan White"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(tinytex)
+
+
+## plot up biomass and metal content in a readable way ----
+
+
+#read in data
+bio <- read.csv("2_incremental/20220404_STANDING_CROP.csv") #metal columns are duplicated and have weird numbers
+metal<- read.csv("2_incremental/20220404_BB_CURRENT.csv")
+
+#mess with data
+metal_long <- pivot_longer(metal, Al:Zn_r, names_to = "element", values_to = "concentration")
+  
+#only epilithic
+peri <- metal %>%
+  filter(SAMPLE_DESCRIPTOR == "EPIL")
+
+peri_long <- metal_long %>%
+  filter(SAMPLE_DESCRIPTOR == "EPIL")%>%
+  filter(element == "Cu"|element =="Fe"|element =="Cd"|element =="Pb"|element =="As"|element =="Zn")
+  
+cu <- peri_long %>%
+  filter(element=="Cu")
+
+biomass <- bio %>%
+  filter(SAMPLE_DESCRIPTOR=="EPIL")
+
+####plots
+#biomass
+
+ggplot(data = peri_long, mapping = aes(x = SAMPLING_DATE, y = concentration, color = SITE)) + 
+  geom_boxplot()+
+  facet_wrap(~element, scale = "free_y") +
+  theme(axis.text.x = element_text(angle=-45, vjust = -0.5))+
+  xlab("Sampling Date")+
+  ylab("Periphyton Biomass ($g/m^2$)")
+
+
+
+
+
+#metals
+
+ggplot(data = peri, mapping = aes(x = SAMPLING_DATE, y = OM.AREA.g.m2)) + 
+  geom_point(mapping = aes(color = SITE)) + 
+  geom_smooth()+
+  theme(legend.position = "bottom", axis.text.x = element_text(angle=-45, vjust = -0.5))
+
+
+
+ggplot(data = peri_long, mapping = aes(x = SAMPLING_DATE, y = concentration, color = SITE)) + 
+  geom_boxplot()+
+  facet_wrap(~element, scale = "free_y") +
+  theme(axis.text.x = element_text(angle=-45, vjust = -0.5))+
+  xlab("Sampling Date")+
+  ylab("Metal Concentration of Periphyton (mg/g)")
+
+ggplot(data = peri_long, mapping = aes(x = SAMPLING_DATE, y = concentration, color = element)) + 
+  geom_boxplot()+
+  facet_wrap(~SITE, scale = "free_y") +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle=-45, vjust = -0.5))+
+  xlab("Sampling Date")+
+  ylab("Metal Concentration of Periphyton (mg/g)")
+
+ggplot(data = cu, mapping = aes(x = SAMPLING_DATE, y = concentration, color = SITE)) + 
+  geom_boxplot()+
+  facet_wrap(~SITE, scale = "free_y") +
+  theme( axis.text.x = element_text(angle=-45, vjust = -0.5))+
+  xlab("Sampling Date")+
+  ylab("Copper Concentration of Periphyton (mg/g)")
+
+
+#all 
+ggplot(data = bio, mapping = aes(x = SAMPLING_DATE, y = OM.AREA.g.m2,color = SAMPLE_DESCRIPTOR)) + 
+  geom_point() + 
+  geom_smooth()
+
+
+#box plots
+ggplot(data = peri) + 
+  geom_boxplot(mapping = aes(x = SAMPLING_DATE, y = OM.AREA.g.m2))+
+  ylab("Periphyton Organic Matter (g/m$^2$)")+
+  xlab("Sampling Date")
+
+
+ggplot(data = bio) + 
+  geom_boxplot(mapping = aes(x = SAMPLING_DATE, y = OM.AREA.g.m2))+
+  facet_wrap(~SITE)
+  ylab("Periphyton Organic Matter (g/m$^2$)")+
+  xlab("Sampling Date")
+
+
+
+  #(size_fraction_plot_3 <- ggplot(ucfr_DTW %>% 
+                                    #filter(element %in% c( "Cu", "Fe")) %>%
+                                    
+                                    #mutate(element = ordered(element, levels = c("Fe", 
+                                                                                 #"Cu" )))) +
+      #geom_boxplot(aes(x=month, y = concentration + 0.01, fill = size_fractions),  
+                   #outlier.shape = NA, width = 0.8) +
+      #scale_fill_viridis_d(name = "Size Fraction", 
+                           #label = c("SPM", "Colloidal", "Truly Dissolved"))+
+      #scale_y_log10(name = "Concentration (ppb)") +
+      #scale_x_discrete(name = "") +
+      #facet_wrap(~element, scale = "free_y") +
+      #theme(legend.position = "bottom", axis.text.x = element_text(angle=-45, vjust = -0.5)))
+  
+
+
+
+
+
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
