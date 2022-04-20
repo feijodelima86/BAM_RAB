@@ -2,7 +2,7 @@ library(tidyverse)
 library(readr)
 library(lubridate) 
 
-BB.RAW <- read.csv("2_incremental/20220307_FIELD_SAMPLES.csv")
+BB.RAW <- read.csv("2_incremental/20220312_MDL_SAMPLES.csv")
 
 #Creating dataset with relevant columns and correcting for dilution (50ml) to obtain mg/sample
 
