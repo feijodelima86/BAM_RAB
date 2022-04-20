@@ -64,3 +64,4 @@ names(STANDING.CROP[,c(49:87)])<-paste(names(STANDING.CROP[,c(49:87)]), "SC")
 #CSV output.
 
 write.csv(STANDING.CROP, paste0("2_incremental/",gsub("-", "", Sys.Date()),"_STANDING_CROP.csv"))
+
