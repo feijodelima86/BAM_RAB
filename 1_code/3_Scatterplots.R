@@ -9,25 +9,18 @@ alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
 
 names(alldata)
 
-
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
-
 n<-7
-n2<-19
+n2<-13
 
 
-Xlabel=expression(bold(paste("Biomass g/m"^"2")))
+#Xlabel=expression(bold(paste("Biomass g/m"^"2")))
+
+Ylabel=expression(bold("Burden (mg/g)"))
   
-  #expression(bold(paste("MB mg/g")))
-#Ylabel=expression(bold("N fixation (mg/m"^"2"~"*h"^"-1"~")"))
 
-#mod.data<-a[complete.cases(a), ]
-#names(mod.data)<-c("Date","PAR","NFix")
-
-
-
-#dev.new()
+dev.new()
 plot(alldata[,n], alldata[,n2], 
      ylim = range(alldata[,n2],na.rm=TRUE),
      xlim = range(alldata[,n],na.rm=TRUE),
@@ -64,7 +57,5 @@ points(dfFILA[,7], dfFILA[,n2],pch=23, cex=1.5,col="black", bg="chartreuse3",lwd
 #title(ylab=Ylabel, line=2.5, cex.lab=1.2, family="Calibri Light")
 
 box(lwd=2)
-
-summary(mod)
 
 
