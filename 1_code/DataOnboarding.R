@@ -177,6 +177,7 @@ write.csv(SAMPLES,"2_incremental\\20220307_FIELD_SAMPLES.csv", row.names = FALSE
 # load in QAQC data
 qaqc.samples <- as.data.frame(read.csv(file.path("./2_incremental","20220307_QAQC_SAMPLES.csv"), header=T, na.strings = c("")))
 
+summary(qaqc.samples)
 
 #select Digestion blank
 blanks <- qaqc.samples %>% filter(SAMPLE_DESCRIPTOR == "DIGEST BLANK")
@@ -338,6 +339,7 @@ mdl.samples <- SAMPLES %>%
                       0.5*mdl$Znr,
                       Znr)) 
 
+summary(mdl.samples)
 
 ### Save file of censored mdl samples
 
