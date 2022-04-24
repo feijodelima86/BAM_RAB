@@ -12,12 +12,12 @@ names(alldata)
 # Selecting variables
 
 n<-7
-n2<-13 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
+n2<-19 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
 
 #Names of axes
 
 Xlabel=expression(bold(paste("Standing Crop"~"(g/m"^"2"~")")))
-Ylabel=expression(bold("As Burden (mg/g)"))
+Ylabel=expression(bold("Cd Burden (mg/g)"))
 
 #Subsetting by compartment
 
@@ -33,10 +33,12 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 #Graphical paramenters
 
 BW1<-5     #Smoothing for x axis dispersion
-BW2<-.009      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
+BW2<-.0004      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
 ALPHA<-0.6  #Transparency of dispersion curves
 
 #dev.new()
+
+jpeg(file='3_products/Manuscript/Figures/Cd_Burdens.jpg')
 
 #Matrix layout for plots
 
@@ -79,7 +81,6 @@ polygon(density(dfFILA[,n], na.rm = TRUE, bw = BW1), col = adjustcolor("chartreu
         lwd=2) 
 
 box(lwd=2)
-
 
 # Plot 2 
 
@@ -163,8 +164,8 @@ aty <- seq(0, max(alldata[,n2], na.rm=TRUE), length.out=5)
 axis(side = 1, at = seq(0, 200, length.out=5), las=1, font.axis=2, cex.axis=1)
 axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1)
 
-title(xlab=Xlabel, line=2.5, cex.lab=1.5, family="Calibri")
-title(ylab=Ylabel, line=2.7, cex.lab=1.5, family="Calibri")
+title(xlab=Xlabel, line=2.5, cex.lab=1.5)
+title(ylab=Ylabel, line=2.7, cex.lab=1.5)
 
 
 points(dfEPIL[,7], dfEPIL[,n2],pch=23, cex=1.5,col="black", bg=colors()[89],lwd=3)
@@ -174,4 +175,6 @@ points(dfEPIP[,7], dfEPIP[,n2],pch=23, cex=1.5,col="black", bg="gold",lwd=3)
 points(dfFILA[,7], dfFILA[,n2],pch=23, cex=1.5,col="black", bg="chartreuse3",lwd=3)
 
 box(lwd=2)
+
+dev.off()
 
