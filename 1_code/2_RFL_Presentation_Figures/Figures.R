@@ -38,7 +38,7 @@ ALPHA<-0.6  #Transparency of dispersion curves
 
 #dev.new()
 
-jpeg(file='3_products/Manuscript/Figures/Cd_Burdens.jpg')
+jpeg(file='3_products/Manuscript/Figures/Cd_Burdens300_2.jpg',height = 5, width = 5, units = 'in', res = 300)
 
 #Matrix layout for plots
 
