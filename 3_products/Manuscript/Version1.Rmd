@@ -23,7 +23,7 @@ When you click the **Knit** button a document will be generated that includes bo
 knitr::include_graphics("Figures/Cd_Burdens.jpg")
 ```
 
-Carao
+
 
 ```{r cars}
 summary(cars)
