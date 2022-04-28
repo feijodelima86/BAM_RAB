@@ -1,0 +1,95 @@
+---
+title: "TABLE_TEST2"
+author: "RFL, DTW, BPC"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+```{r}
+library("knitr")
+library("kableExtra")
+library("dplyr")
+library("readr")
+library("tidyr")
+library("forcats")
+
+alldata <- read.csv("C:/Users/feijo/OneDrive/Documents/GIT_Projects/BAM_RAB_OVERLEAF/2_incremental/20220420_STANDING_CROP.csv")
+
+names(alldata)
+
+dfEPIL <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
+
+dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
+
+dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
+
+dfALL <- alldata %>% filter(
+  SAMPLE_DESCRIPTOR== "EPIL" | SAMPLE_DESCRIPTOR == "EPIP"| SAMPLE_DESCRIPTOR == "FILA",
+)
+
+n<-c(13,19,22,25,35,49) ## (As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
+#c(13,19,22,25,35,49)+39
+
+
+se <- function(x, ...) sqrt(var(x, ...)/length(x))
+
+ALL.SUM<-data.frame(aggregate(as.numeric(dfALL[,n[1]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, mean))
+ALL.SUM[,5]<- aggregate(as.numeric(dfALL[,n[1]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, se)[,4]
+ALL.SUM[,6]<- aggregate(as.numeric(dfALL[,n[2]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, mean)[,4]
+ALL.SUM[,7]<- aggregate(as.numeric(dfALL[,n[2]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, se)[,4]
+ALL.SUM[,8]<- aggregate(as.numeric(dfALL[,n[3]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, mean)[,4]
+ALL.SUM[,9]<- aggregate(as.numeric(dfALL[,n[3]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, se)[,4]
+ALL.SUM[,10]<-aggregate(as.numeric(dfALL[,n[4]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, mean)[,4]
+ALL.SUM[,11]<-aggregate(as.numeric(dfALL[,n[4]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, se)[,4]
+ALL.SUM[,12]<-aggregate(as.numeric(dfALL[,n[5]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, mean)[,4]
+ALL.SUM[,13]<-aggregate(as.numeric(dfALL[,n[5]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, se)[,4]
+ALL.SUM[,14]<-aggregate(as.numeric(dfALL[,n[6]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, mean)[,4]
+ALL.SUM[,15]<-aggregate(as.numeric(dfALL[,n[6]]) ~ SAMPLING_DATE+SITE+SAMPLE_DESCRIPTOR, dfALL, se)[,4]
+
+names(ALL.SUM)<-c("DATE","SITE","SAMPLE_DESCRIPTOR","MEAN.AS","STDER.AS","MEAN.CD","STDER.CD","MEAN.CU","STDER.CU","MEAN.FE","STDER.FE","MEAN.PB","STDER.PB","MEAN.ZN","STDER.ZN")
+
+head(ALL.SUM)
+
+ALL.SUM<-ALL.SUM %>%
+  mutate(SITENUM = case_when(
+    endsWith(SITE, "WS") ~ "1",
+    endsWith(SITE, "DL") ~ "6",
+    endsWith(SITE, "GR") ~ "8",
+    endsWith(SITE, "GC") ~ "9",
+    endsWith(SITE, "BG") ~ "10",
+    endsWith(SITE, "BN") ~ "11"
+  ))
+
+
+ALL.SUM<-ALL.SUM %>% arrange(SAMPLE_DESCRIPTOR,SITENUM,DATE)
+ALL.SUM<-ALL.SUM[,-16]
+
+
+ncol(ALL.SUM)
+ALL.SUM %>% subset(SITE == "BN")
+
+EPIL.SUM <- ALL.SUM[which(ALL.SUM$SAMPLE_DESCRIPTOR == "EPIL"),]
+
+EPIP.SUM <- ALL.SUM[which(ALL.SUM$SAMPLE_DESCRIPTOR == "EPIP"),]
+
+FILA.SUM <- ALL.SUM[which(ALL.SUM$SAMPLE_DESCRIPTOR == "FILA"),]
+
+
+# Create table to present the data]
+Fig_2 <- kable(EPIL.SUM, 
+               caption = "Burdens per compartment",
+               format = "latex", booktabs = TRUE) %>%
+  kable_styling(font_size = 5) %>%
+  pack_rows(tab_kable, colnum = 1,
+            index = table(fct_inorder(EPIL.SUM$DATE), useNA = "no"))
+
+
+```
+
+```{r, results='asis'}
+Fig_2
+```

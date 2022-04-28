@@ -3,7 +3,7 @@ library(readr)
 library(plyr)
 library(dplyr)
 
-alldata <- read.csv("2_incremental/20220313_STANDING_CROP.csv")
+alldata <- read_csv("2_incremental/20220420_STANDING_CROP.csv")
 
 alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
 
@@ -11,7 +11,7 @@ alldata$SAMPLING_DATE<-factor(alldata$SAMPLING_DATE,levels = c("6/22/2021", "7/7
 
 # Variable date to factor
 
-dfALL <- alldata
+dfALL <- data.frame(alldata)
 
 dfEPIL <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
 
@@ -77,8 +77,6 @@ arrows(barCenters, tabbedMeans, barCenters,
        code = 2, length = 0.05)
 
 box(lwd=3)
-
-
 
 
 
