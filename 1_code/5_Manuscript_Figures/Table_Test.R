@@ -1,9 +1,11 @@
-library(dplyr)
-library(knitr)
-library(DT)
-library(xtable)
+library("knitr")
+library("kableExtra")
+library("dplyr")
+library("readr")
+library("tidyr")
+library("forcats")
 
-alldata <- read.csv("2_incremental/20220420_STANDING_CROP.csv")
+alldata <- read.csv("C:/Users/feijo/OneDrive/Documents/GIT_Projects/BAM_RAB_OVERLEAF/2_incremental/20220420_STANDING_CROP.csv")
 
 names(alldata)
 
@@ -52,7 +54,10 @@ ALL.SUM<-ALL.SUM %>%
 
 
 ALL.SUM<-ALL.SUM %>% arrange(SAMPLE_DESCRIPTOR,SITENUM,DATE)
+ALL.SUM<-ALL.SUM[,-16]
 
+
+ncol(ALL.SUM)
 ALL.SUM %>% subset(SITE == "BN")
 
 EPIL.SUM <- ALL.SUM[which(ALL.SUM$SAMPLE_DESCRIPTOR == "EPIL"),]
@@ -62,15 +67,14 @@ EPIP.SUM <- ALL.SUM[which(ALL.SUM$SAMPLE_DESCRIPTOR == "EPIP"),]
 FILA.SUM <- ALL.SUM[which(ALL.SUM$SAMPLE_DESCRIPTOR == "FILA"),]
 
 
+nrow(EPIL.SUM)
+
+write.csv(ALL.SUM, paste0("2_incremental/",gsub("-", "", Sys.Date()),"_BURDENS_SS_SUMMARY.csv"))
+
 # Create table to present the data]
 Fig_2 <- kable(EPIL.SUM, 
-               caption = "Deaths from unintentional injuries in Scotland",
+               caption = "Burdens per compartment",
                format = "latex", booktabs = TRUE) %>%
-  kable_styling(font_size = 10) %>%
+  kable_styling(font_size = 5) %>%
   pack_rows(tab_kable, colnum = 1,
             index = table(fct_inorder(EPIL.SUM$DATE), useNA = "no"))
-
-getwd()
-
-
-

@@ -19,7 +19,7 @@ dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
 dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
-ssite<-"BG"
+ssite<-"WS"
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
