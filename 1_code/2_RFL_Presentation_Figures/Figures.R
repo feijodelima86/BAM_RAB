@@ -12,12 +12,12 @@ names(alldata)
 # Selecting variables
 
 n<-7
-n2<-19 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
+n2<-49 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
 
 #Names of axes
 
 Xlabel=expression(bold(paste("Standing Crop"~"(g/m"^"2"~")")))
-Ylabel=expression(bold("Cd Burden (mg/g)"))
+Ylabel=expression(bold("Zn Burden (mg/g)"))
 
 #Subsetting by compartment
 
@@ -36,9 +36,9 @@ BW1<-5     #Smoothing for x axis dispersion
 BW2<-.0004      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
 ALPHA<-0.6  #Transparency of dispersion curves
 
-#dev.new()
+dev.new()
 
-jpeg(file='3_products/Manuscript/Figures/Cd_Burdens300_2.jpg',height = 5, width = 5, units = 'in', res = 300)
+#jpeg(file='3_products/Manuscript/Figures/Cd_Burdens300_2.jpg',height = 5, width = 5, units = 'in', res = 300)
 
 #Matrix layout for plots
 
@@ -146,6 +146,8 @@ axis(side = 1, at = aty1, labels=format(aty1, scientific=F,digits = 1), las=1, f
 
 #Plot 3
 
+dev.new()
+
 par(mar=c(4.5, 4.5, 0.5, 0.5))
 
 plot(alldata[,n], alldata[,n2], 
@@ -176,5 +178,5 @@ points(dfFILA[,7], dfFILA[,n2],pch=23, cex=1.5,col="black", bg="chartreuse3",lwd
 
 box(lwd=2)
 
-dev.off()
+#dev.off()
 

@@ -107,6 +107,7 @@ b <- getViz(GAM)
 
 plot(b)
 
+
 ##### FORLOOP TEST #####
 
 ## make up some data

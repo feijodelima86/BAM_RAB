@@ -20,17 +20,18 @@ dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
 dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
-ssite<-"GR"
+ssite<-"BN"
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
 names(alldata)
 
-n1<-7
+n1<-52
 
 mult=1
 
-yrange<-150
+yrange<-4
+
 
 
 EPIL.SUM<-data.frame(aggregate(as.numeric(dfEPIL[,n1]) ~ SAMPLING_DATE+SITE, dfEPIL, mean))
