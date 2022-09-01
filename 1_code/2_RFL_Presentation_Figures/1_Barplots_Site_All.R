@@ -5,8 +5,6 @@ library(dplyr)
 
 alldata <- read_csv("2_incremental/20220420_STANDING_CROP.csv")
 
-alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
-
 alldata$SAMPLING_DATE<-factor(alldata$SAMPLING_DATE,levels = c("6/22/2021", "7/7/2021", "7/20/2021", "8/3/2021", "8/17/2021","9/9/2021", "9/22/2021", "10/13/2021"), ordered=TRUE)
 
 # Variable date to factor
@@ -21,7 +19,7 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
-Ylabel=expression(bold("Cu Burden (mg/g)"))
+Ylabel=expression(bold("Cu Contents (mg/g)"))
 
 names(alldata)
 
@@ -40,12 +38,15 @@ ALL.SUM[is.na(ALL.SUM)] <- 0
 
 ALL.SUM[ALL.SUM < 0] <- 0
 
+ALL.SUM$SITE <- factor(ALL.SUM$SITE, c("WS","DL","GR","GC","BG","BN"))
+
 
 aty <- seq(0, max(ALL.SUM$MEAN.ALL, na.rm=TRUE), length.out=5)
 
 # Uniform color
 
 names(ALL.SUM)
+
 
 #dev.new()
 
@@ -55,6 +56,7 @@ tabbedMeans <- tapply(ALL.SUM$MEAN.ALL, list(ALL.SUM$SAMPLE_DESCRIPTOR,
 tabbedSE <- tapply(ALL.SUM$STDER.ALL, list(ALL.SUM$SAMPLE_DESCRIPTOR,
                                            ALL.SUM$SITE),
                    function(x) c(x = x))
+
 
 barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR+SITE, data = ALL.SUM, 
                       beside = TRUE, 
@@ -68,12 +70,12 @@ barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR+SITE, data = ALL.SUM,
                       space=c(0, 4)
 )
 
-segments(barCenters, tabbedMeans, barCenters,
-         tabbedMeans + tabbedSE, lwd = 2)
+try(segments(barCenters, tabbedMeans, barCenters,
+         tabbedMeans + tabbedSE, lwd = 2), silent=TRUE)
 
-arrows(barCenters, tabbedMeans, barCenters,
+try(arrows(barCenters, tabbedMeans, barCenters,
        tabbedMeans + tabbedSE, lwd = 2, angle = 90,
-       code = 2, length = 0.05)
+       code = 2, length = 0.05), silent=TRUE)
 
 box(lwd=3)
 

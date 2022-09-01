@@ -7,9 +7,9 @@ require(gam)
 
 #if na on column x then interpolate burdens.
 
-alldata <- read.csv("C:/Users/feijo/OneDrive/Documents/GIT_Projects/BAM_RAB_OVERLEAF/2_incremental/20220420_STANDING_CROP.csv")
+alldata <- read.csv("2_incremental/20220420_STANDING_CROP.csv")
 
-alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
+alldata$SAMPLING_DATE<-factor(alldata$SAMPLING_DATE,levels = c("6/22/2021", "7/7/2021", "7/20/2021", "8/3/2021", "8/17/2021","9/9/2021", "9/22/2021", "10/13/2021"), ordered=TRUE)
 
 names(alldata)
 
@@ -95,7 +95,7 @@ summary(GAM)
 plot(GAM,residuals=TRUE,pch=19,cex=.5)
 
 pd<-data.frame(SITE = c("WS","DL","GC","BG","BN","GR"),DATE=as.numeric(as.Date("2021/07/20")))
-pv <- predict.gam(GAM,pd)
+pv <- predict(GAM,pd)
 
 pd[,3]<-pv
 
