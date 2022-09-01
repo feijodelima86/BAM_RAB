@@ -5,13 +5,11 @@ library(dplyr)
 
 alldata <- read_csv("2_incremental/20220420_STANDING_CROP.csv")
 
-alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
-
 alldata$SAMPLING_DATE<-factor(alldata$SAMPLING_DATE,levels = c("6/22/2021", "7/7/2021", "7/20/2021", "8/3/2021", "8/17/2021","9/9/2021", "9/22/2021", "10/13/2021"), ordered=TRUE)
 
 # Variable date to factor
 
-dfALL <- data.frame(alldata)
+dfALL <- data.frame(alldata[which(alldata$SAMPLE_DESCRIPTOR == c("EPIL","EPIP","FILA")),])
 
 dfEPIL <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
 
@@ -19,7 +17,7 @@ dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
 dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
-ssite<-"BN"
+ssite<-"GC"
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
@@ -27,7 +25,7 @@ Ylabel=expression(bold("Zn Burden (mg/g)"))
 
 names(alldata)
 
-n1<-49
+n1<-40
 
 mult=1
 
@@ -49,7 +47,7 @@ aty <- seq(0, max(ALL.SUM$MEAN.ALL, na.rm=TRUE), length.out=5)
 
 names(ALL.SUM)
 
-#dev.new()
+dev.new()
 
 tabbedMeans <- tapply(ALL.SUM$MEAN.ALL, list(ALL.SUM$SAMPLE_DESCRIPTOR,
                                              ALL.SUM$DATE),
@@ -70,11 +68,11 @@ barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR+DATE, data = ALL.SUM,
 )
 
 segments(barCenters, tabbedMeans, barCenters,
-         tabbedMeans + tabbedSE, lwd = 2)
+         tabbedMeans + tabbedSE, lwd = 3)
 
 arrows(barCenters, tabbedMeans, barCenters,
-       tabbedMeans + tabbedSE, lwd = 2, angle = 90,
-       code = 2, length = 0.05)
+       tabbedMeans + tabbedSE, lwd = 3, angle = 90,
+       code = 2, length = 0.1)
 
 box(lwd=3)
 

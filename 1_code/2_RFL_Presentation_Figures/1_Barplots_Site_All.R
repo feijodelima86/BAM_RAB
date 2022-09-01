@@ -70,15 +70,11 @@ barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR+SITE, data = ALL.SUM,
                       space=c(0, 4)
 )
 
-try(segments(barCenters, tabbedMeans, barCenters,
-         tabbedMeans + tabbedSE, lwd = 2), silent=TRUE)
+try(segments(barCenters, tabbedMeans, barCenters,tabbedMeans + tabbedSE, lwd = 2), silent=TRUE)
 
-try(arrows(barCenters, tabbedMeans, barCenters,
-       tabbedMeans + tabbedSE, lwd = 2, angle = 90,
-       code = 2, length = 0.05), silent=TRUE)
+try(arrows(barCenters, tabbedMeans, barCenters, tabbedMeans + tabbedSE, lwd = 2, angle = 90, code = 2, length = 0.05), silent=TRUE)
 
-box(lwd=3)
-
+try(box(lwd=3), silent=TRUE)
 
 
 
