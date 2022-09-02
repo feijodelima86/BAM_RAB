@@ -25,7 +25,7 @@ se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
 names(alldata)
 
-n1<-52
+n1<-87
 
 mult=1
 
@@ -112,7 +112,7 @@ ardat3 <- lapply(1:L,function(x){
 #dev.new(width=10, height=7, noRStudioGD = TRUE)
 plot(ALL.SUM[,1], ALL.SUM[,5],
      type='n',
-     ylim=c(0.015, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 3.5, f = ceiling)),
+     ylim=c(20, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 100, f = ceiling)),
      xlim= c(as.Date("2021-06-20"),as.Date("2021-10-30")),
      ylab=NA, 
      yaxt = "n",
@@ -128,7 +128,7 @@ axis(side = 2, las=1, font.axis=1, cex.axis=1.5)
 
 plyr::round_any(range(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), 10, f = ceiling)
 
-at = seq(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), .5, f = ceiling), length.out=5)
+at = seq(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), 175, f = ceiling), length.out=5)
 
 axis.Date(1, at=seq(as.Date("2021-06-20"), as.Date("2021-10-30"), "1 week"), las=1, font.axis=2, cex.axis=1.5, format="%d-%b")
 

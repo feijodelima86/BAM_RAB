@@ -3,7 +3,7 @@ library(readr)
 library(plyr)
 library(dplyr)
 
-alldata <- read_csv("2_incremental/20220420_STANDING_CROP.csv")
+alldata <- read_csv("2_incremental/20220420_STANDING_CROP_Rafa_Interpolation_Dont_Use.csv")
 
 alldata$SAMPLING_DATE<-factor(alldata$SAMPLING_DATE,levels = c("6/22/2021", "7/7/2021", "7/20/2021", "8/3/2021", "8/17/2021","9/9/2021", "9/22/2021", "10/13/2021"), ordered=TRUE)
 
@@ -21,11 +21,11 @@ ssite<-"GC"
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
-Ylabel=expression(bold("Zn Burden (mg/g)"))
+Ylabel=expression(bold("P Burden (mg/g)"))
 
 names(alldata)
 
-n1<-40
+n1<-34
 
 mult=1
 
