@@ -3,10 +3,9 @@ library(readr)
 library(plyr)
 library(dplyr)
 
-alldata <- read.csv("2_incremental/20220310_STANDING_CROP.csv")
+alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP_Rafa_Interpolation_Dont_Use.csv"))
 
-alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
-
+alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE, format = "%m/%d/%Y")
 
 #alldata[,c(11-87)]<-alldata[,c(13-87)]
 
@@ -29,10 +28,6 @@ names(alldata)
 n1<-52
 
 mult=1
-
-yrange<-4
-
-
 
 EPIL.SUM<-data.frame(aggregate(as.numeric(dfEPIL[,n1]) ~ SAMPLING_DATE+SITE, dfEPIL, mean))
 EPIL.SUM[,4]<-aggregate(as.numeric(dfEPIL[,n1]) ~ SAMPLING_DATE+SITE, dfEPIL, se)[,3]
@@ -114,11 +109,10 @@ ardat3 <- lapply(1:L,function(x){
 
 #create empty plot
 
-
-dev.new(width=10, height=7, noRStudioGD = TRUE)
-plot(ALL.SUM[,1], ALL.SUM[,2],
+#dev.new(width=10, height=7, noRStudioGD = TRUE)
+plot(ALL.SUM[,1], ALL.SUM[,5],
      type='n',
-     ylim=c(0,yrange),
+     ylim=c(0.015, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 3.5, f = ceiling)),
      xlim= c(as.Date("2021-06-20"),as.Date("2021-10-30")),
      ylab=NA, 
      yaxt = "n",
@@ -129,7 +123,12 @@ plot(ALL.SUM[,1], ALL.SUM[,2],
 )
 
 
-axis(side = 2, at = seq(0, yrange, length.out=5), las=1, font.axis=1, cex.axis=1.5)
+axis(side = 2, las=1, font.axis=1, cex.axis=1.5)
+
+
+plyr::round_any(range(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), 10, f = ceiling)
+
+at = seq(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), .5, f = ceiling), length.out=5)
 
 axis.Date(1, at=seq(as.Date("2021-06-20"), as.Date("2021-10-30"), "1 week"), las=1, font.axis=2, cex.axis=1.5, format="%d-%b")
 
@@ -139,12 +138,14 @@ for (i in 1:L) polygon(unlist(dat3[[i]]$xx),unlist(dat3[[i]]$yy),col="gold", bor
 for (i in 1:L) polygon(unlist(dat2[[i]]$xx),unlist(dat2[[i]]$yy),col="chartreuse3", border="black")
 for (i in 1:L) polygon(unlist(dat1[[i]]$xx),unlist(dat1[[i]]$yy),col=colors()[89],border="black")
 
+warnings()
+
 for (i in 1:L) arrows(unlist(ardat3[[i]]$x0),unlist(ardat3[[i]]$y0),unlist(ardat3[[i]]$x1),unlist(ardat3[[i]]$y1), length=0.075, angle=90, code=2, lwd=2,col="black")
 for (i in 1:L) arrows(unlist(ardat2[[i]]$x0),unlist(ardat2[[i]]$y0),unlist(ardat2[[i]]$x1),unlist(ardat2[[i]]$y1), length=0.075, angle=90, code=2, lwd=2,col="black")
 for (i in 1:L) arrows(unlist(ardat1[[i]]$x0),unlist(ardat1[[i]]$y0),unlist(ardat1[[i]]$x1),unlist(ardat1[[i]]$y1), length=0.075, angle=90, code=2, lwd=2,col="black")
 
 
 box(lwd=4)
-
+options("warn"=1)
 
 
