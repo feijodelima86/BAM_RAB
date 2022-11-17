@@ -23,11 +23,13 @@ ssite<-"WS"
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
-Ylabel=expression(bold("As Content (mg/g)"))
+Ylabel=expression(bold("Zn Content (mg/g)"))
 
 names(alldata)
 
-n1<-13
+#select element: As=13, Cd=19, Cu=22, Fe=23, Pb=35, Se=40, Zn=49
+
+n1<-49
 
 mult=1
 
@@ -47,7 +49,7 @@ aty <- seq(0, max(ALL.SUM$MEAN.ALL, na.rm=TRUE), length.out=5)
 
 names(ALL.SUM)
 
-dev.new()
+#dev.new()
 
 par(mar=c(3.5,6,3,1))
 
@@ -66,10 +68,19 @@ barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR+DATE, data = ALL.SUM,
                       ylab=Ylabel,
                       cex.lab=2,
                       cex.axis=1.5,
+                      cex.names=1.5,
                       col=c(colors()[89],"gold" , "chartreuse"),
                       font=2,
                       lwd=2
 )
+
+
+
+legend(x = "topright", legend = levels(factor(ALL.SUM$SAMPLE_DESCRIPTOR)), 
+       pch=c(22,22,22), 
+       box.lwd=2,
+       col = "black", 
+       pt.bg=c(colors()[89], "gold", "chartreuse"), pt.lwd=3)
 
 segments(barCenters, tabbedMeans, barCenters,
          tabbedMeans + tabbedSE, lwd = 3)
@@ -79,8 +90,6 @@ arrows(barCenters, tabbedMeans, barCenters,
        code = 2, length = 0.1)
 
 box(lwd=3)
-
-
 
 
 

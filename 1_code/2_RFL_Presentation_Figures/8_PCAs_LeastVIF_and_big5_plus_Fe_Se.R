@@ -31,9 +31,9 @@ LABELS<-LABELS[order(LABELS$SAMPLE_DESCRIPTOR, decreasing = F), ]
 PCA.DF<-as.data.frame(LABELS[,c(4:ncol(LABELS))])
 names(PCA.DF)<- c("As","Cd","Cu","Fe","Pb","Se","Zn")
 
+dev.new()
 cor(PCA.DF)
 corrplot(cor(PCA.DF), method = "circle", lwd=2) 
-
 
 
 ###PCA###
@@ -58,7 +58,7 @@ summary(my.prc)
 colors <- c(colors()[89], "gold", "chartreuse")
 colors <- colors[as.numeric(factor(na.omit(LABELS$SAMPLE_DESCRIPTOR)))]
 
-#dev.new()
+dev.new()
 
 plot	(my.prc$x,
       pch=c(23,24,25)[as.numeric(factor(LABELS$SAMPLE_DESCRIPTOR))],
@@ -76,7 +76,7 @@ tab <- matrix(c(my.prc$x[,1], my.prc$x[,2]), ncol=2)
 
 legend(x = "topleft", legend = levels(factor(LABELS$SAMPLE_DESCRIPTOR)), 
       pch=c(23,24,25), 
-      cex = 1.5, 
+      cex = 1, 
       box.lwd=3,
       col = "black", 
       pt.bg=c(colors()[89], "gold", "chartreuse"), pt.lwd=3)

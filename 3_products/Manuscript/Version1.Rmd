@@ -21,7 +21,6 @@ This document contains preliminary analyses regarding the BAM_RAB data set as it
 
 
 
-
 ```{r, echo=FALSE, fig.cap="A caption", out.width = '100%'}
 knitr::include_graphics("Figures/Cd_Burdens.jpg")
 ```

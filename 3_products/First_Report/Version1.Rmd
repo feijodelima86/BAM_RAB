@@ -1,0 +1,162 @@
+---
+title: "BAM_RAB v 0.1"
+author: "RFL, DTW, BPC"
+date: "`r Sys.Date()`"
+header-includes:
+  - \usepackage{placeins}
+output:
+  pdf_document:
+    keep_tex: true
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(lme4)
+knitr::opts_chunk$set(echo = FALSE, cache=FALSE)
+knitr::knit_hooks$set(plot = function(x, options)  {
+  paste0(knitr::hook_plot_tex(x, options), "\n\\FloatBarrier\n")
+})
+
+```
+
+
+
+# Preliminary Analyses
+
+This document contains preliminary analyses regarding the BAM_RAB data set as it stands. These preliminary analyses focus on the following elements: As,Cd,Cu,Fe,Pb,Se and Zn. These elements were selected based on interest in the "Big 5" contaminants of concern plus Fe due to our interest in particle formation. I also added Se given the current interests of our extended research group, as well as some interesting parallels between the behavior of Se and Zn.
+
+## 1. Temporal patterns in metal accumulation in biomass contents (mg/g).
+
+The following figures represent the patterns for all samples over time within the three biomass compartments, all sites included. The code for generation all these figures is located under 1_code/2_RFL_Presentation_Figures/1_Barplots_Time_All.R
+
+Arsenic (Fig.1) seems to be the only element that actually decreases over time as the growing season progresses. I think this would be the main suspect when we actually try to trace the relationship between metals in algae and metals in water.
+
+```{r, echo=FALSE, fig.cap="Figure 1.1: Arsenic content of benthic biomass compartments over time.", out.width = '100%'}
+knitr::include_graphics("Figures/1.jpeg")
+```
+
+For most metals, patterns are pretty similar (Figs. 2,3,4,5).
+
+```{r, echo=FALSE, fig.cap="Figure 1.2: Cadmium content of benthic biomass compartments over time.", out.width = '100%'}
+knitr::include_graphics("Figures/2.jpeg")
+```
+
+
+```{r, echo=FALSE, fig.cap="Figure 1.3: Copper content of benthic biomass compartments over time.", out.width = '100%'}
+knitr::include_graphics("Figures/3.jpeg")
+```
+
+
+```{r, echo=FALSE, fig.cap="Figure 1.4: Iron content of benthic biomass compartments over time.", out.width = '100%'}
+knitr::include_graphics("Figures/4.jpeg")
+```
+
+
+```{r, echo=FALSE, fig.cap="Figure 1.5: Lead content of benthic biomass compartments over time.", out.width = '100%'}
+knitr::include_graphics("Figures/5.jpeg")
+```
+
+\newpage
+
+Now we we get to the 2 elements that actually differ. Selenium seems to peak earlier in the season (when compared to Cd,Cu, Fe and Pb).
+
+```{r, echo=FALSE, fig.cap="Figure 1.6: Selenium content of benthic biomass compartments over time.", out.width = '100%'}
+knitr::include_graphics("Figures/6.jpeg")
+```
+
+And of course, as discussed before, Zn is not really present in filamentous algae. Looking at the other compartments it does not seem to present any temporal trends.
+
+```{r, echo=FALSE, fig.cap="Figure 1.7: Zinc content of benthic biomass compartments over time.", out.width = '100%'}
+knitr::include_graphics("Figures/7.jpeg")
+```
+
+\newpage
+
+## 2.Temporal patterns in metal "stocks" for individual sites.
+
+
+
+\newpage
+
+## Correlation between metals among compartments
+
+\newpage
+
+## Principal component analyses of contents and stocks by compartment.
+
+PCA analysis was performed in a two tier fashion. Firstly, I performed a PCA analysis on all samples using the BIG5+ elements (As,Cd,Cu,Fe,Pb,Se and Zn) for both metal contents (mg/g) and stocks (mg/m2). However, due to the high collinearity (next figure, still figuring out figure numbering in Markdown) I performed a Variance Inflation test to eliminate highly collinear variables and retain the elements that comprise the highest amount of variance. I did this independently for contents and stocks.I'm calling this group of variables "LEASTVIF".
+
+
+```{r, echo=FALSE, fig.cap="Correlation plots of BIG5+ elemental contents for all biomass compartments combined.", out.width = '100%'}
+knitr::include_graphics("Figures/CORRPLOT_1_BIG5PLUS.jpeg")
+```
+
+\newpage
+
+These are the PCA results for contents using the BIG5+ elements. Variables have been logged, scaled and centered.
+
+```{r, echo=FALSE, fig.cap="Prinicipal component analysis of BIG5+ elemental contents for three different biomass compartments. Secondary X and Y axes (top and right) indicate correlation between variables and principal components.", out.width = '100%'}
+knitr::include_graphics("Figures/PCA_1_BIG5PLUS.jpeg")
+```
+
+\newpage
+
+Here is the correlation plot for the LEASTVIF contents dataset. Variables retained were Be,Ca,Co,Mo,Pb,S,Se,Si and Sn.
+
+```{r, echo=FALSE, fig.cap="Correlation plots of LEASTVIF elemental contents for all biomass compartments combined.", out.width = '100%'}
+knitr::include_graphics("Figures/CORRPLOT_1_LEAST_VIF.jpeg")
+```
+
+These are the results for contents using the LEASTVIF elements. Variables have been logged, scaled and centered.
+
+\newpage
+
+```{r, echo=FALSE, fig.cap="Prinicipal component analysis of LEASTVIF elemental contents for three different biomass compartments. Secondary X and Y axes (top and right) indicate correlation between variables and principal components.", out.width = '100%'}
+knitr::include_graphics("Figures/PCA_1_LEASTVIF.jpeg")
+```
+
+\newpage
+
+Here are the results for stocks for BIG5 and LEASTVIF:
+
+```{r, echo=FALSE, fig.cap="Prinicipal component analysis of BIG5+ elemental stocks for three different biomass compartments. Secondary X and Y axes (top and right) indicate correlation between variables and principal components.", out.width = '100%'}
+knitr::include_graphics("Figures/PCA_2_BIG5PLUS.jpeg")
+```
+
+
+
+```{r, echo=FALSE, fig.cap="Prinicipal component analysis of LEASTVIF elemental stocks for three different biomass compartments. Secondary X and Y axes (top and right) indicate correlation between variables and principal components.", out.width = '100%'}
+knitr::include_graphics("Figures/PCA_2_LEASTVIF.jpeg")
+```
+
+
+\newpage
+
+Next steps are to extract PCA scores for samples and see how they vary with time and pigment contents. 
+
+## Methods
+
+##Study area
+
+##Field Sampling
+
+###Biomass
+
+###Water
+
+##Biomass sample processing
+
+##Nutrient Analysis
+
+##Metal Analysis
+
+##Metabolic measurements
+
+##Other?
+
+# Results
+
+ 
+# Discussion
+
+

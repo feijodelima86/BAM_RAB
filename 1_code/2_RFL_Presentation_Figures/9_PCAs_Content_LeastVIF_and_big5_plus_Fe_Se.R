@@ -57,7 +57,7 @@ summary(my.prc)
 colors <- c(colors()[89], "gold", "chartreuse")
 colors <- colors[as.numeric(factor(na.omit(LABELS$SAMPLE_DESCRIPTOR)))]
 
-#dev.new()
+dev.new()
 
 plot	(my.prc$x,
       pch=c(23,24,25)[as.numeric(factor(LABELS$SAMPLE_DESCRIPTOR))],
@@ -79,7 +79,7 @@ panel.first= {
 }
 
 
-legend(x = "topleft", legend = levels(factor(LABELS$SAMPLE_DESCRIPTOR)), 
+legend(x = "topright", legend = levels(factor(LABELS$SAMPLE_DESCRIPTOR)), 
        pch=c(23,24,25), 
        cex = 1.5, 
        box.lwd=3,
