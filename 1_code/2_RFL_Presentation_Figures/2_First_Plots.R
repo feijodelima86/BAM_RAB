@@ -7,6 +7,8 @@ alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP_Rafa_Interp
 
 alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE, format = "%m/%d/%Y")
 
+se <- function(x, ...) sqrt(var(x, ...)/length(x))
+
 #alldata[,c(11-87)]<-alldata[,c(13-87)]
 
 #alldata<-replace(alldata[c(13:88)], alldata[c(13:87)] < 0, 0)
@@ -19,9 +21,11 @@ dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
 dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
-ssite<-"BN"
+#Selected site 
 
-se <- function(x, ...) sqrt(var(x, ...)/length(x))
+ssite<-"GC"
+
+# Selected element
 
 names(alldata)
 

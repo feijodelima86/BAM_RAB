@@ -3,7 +3,9 @@ library(readr)
 library(plyr)
 library(dplyr)
 
-alldata <- read_csv("2_incremental/20220420_STANDING_CROP_Rafa_Interpolation_Dont_Use.csv")
+alldata <- read.csv("2_incremental/20220313_STANDING_CROP.csv")
+
+#alldata <- read_csv("2_incremental/20220420_STANDING_CROP_Rafa_Interpolation_Dont_Use.csv")
 
 alldata$SAMPLING_DATE<-factor(alldata$SAMPLING_DATE,levels = c("6/22/2021", "7/7/2021", "7/20/2021", "8/3/2021", "8/17/2021","9/9/2021", "9/22/2021", "10/13/2021"), ordered=TRUE)
 
@@ -17,15 +19,15 @@ dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
 dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
-ssite<-"GC"
+ssite<-"WS"
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
-Ylabel=expression(bold("P Burden (mg/g)"))
+Ylabel=expression(bold("As Content (mg/g)"))
 
 names(alldata)
 
-n1<-34
+n1<-13
 
 mult=1
 
@@ -43,11 +45,12 @@ ALL.SUM[ALL.SUM < 0] <- 0
 
 aty <- seq(0, max(ALL.SUM$MEAN.ALL, na.rm=TRUE), length.out=5)
 
-# Uniform color
-
 names(ALL.SUM)
 
 dev.new()
+
+par(mar=c(3.5,6,3,1))
+
 
 tabbedMeans <- tapply(ALL.SUM$MEAN.ALL, list(ALL.SUM$SAMPLE_DESCRIPTOR,
                                              ALL.SUM$DATE),
@@ -61,7 +64,8 @@ barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR+DATE, data = ALL.SUM,
                       ylim = c(0, max(ALL.SUM$MEAN.ALL+ALL.SUM$STDER.ALL, na.rm=T)*1.1),
                       xlab="",
                       ylab=Ylabel,
-                      #                     col=colors()[89],
+                      cex.lab=2,
+                      cex.axis=1.5,
                       col=c(colors()[89],"gold" , "chartreuse"),
                       font=2,
                       lwd=2

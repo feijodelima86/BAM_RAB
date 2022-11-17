@@ -5,7 +5,7 @@ library(dplyr)
 
 alldata <- read.csv("2_incremental/20220313_STANDING_CROP.csv")
 
-alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
+#@alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
 
 alldata$SAMPLING_DATE<-factor(alldata$SAMPLING_DATE,levels = c("6/22/2021", "7/7/2021", "7/20/2021", "8/3/2021", "8/17/2021","9/9/2021", "9/22/2021", "10/13/2021"), ordered=TRUE)
 
@@ -58,7 +58,7 @@ dev.new()
 par(mar=c(9, 9, 9, 9))
 barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR, data = ALL.SUM, 
                       beside = TRUE, 
-                      ylim = c(0.001, max(ALL.SUM$MEAN.ALL+ALL.SUM$STDER.ALL, na.rm=T)*1.3),
+                      ylim = c(0.001, max(ALL.SUM$MEAN.ALL+ALL.SUM$STDER.ALL, na.rm=T)*3),
                       xlab = NA,
                       yaxt = "n",
                       ylab = NA,
@@ -73,7 +73,7 @@ segments(barCenters, tabbedMeans, barCenters,
 
 arrows(barCenters, tabbedMeans, barCenters,
        tabbedMeans + tabbedSE, lwd = 2, angle = 90,
-       code = 2, length = 0.125)
+       code = 2, length = .25)
 
 box(lwd=3)
 

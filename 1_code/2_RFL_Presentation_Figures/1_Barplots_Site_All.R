@@ -19,9 +19,9 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
-Ylabel=expression(bold("Cu Contents (mg/g)"))
-
 names(alldata)
+
+Ylabel=expression(bold("Cu Contents (mg/g)"))
 
 n1<-22
 

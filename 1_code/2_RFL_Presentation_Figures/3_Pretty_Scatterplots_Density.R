@@ -26,7 +26,7 @@ Ylabel=expression(bold("Zn Burden (mg/g)"))
 
 #windows(width = 15, height = 25)
 #dev.off()     
-dev.new()
+#dev.new()
 
 par(mfrow = c(2, 1)) 
 

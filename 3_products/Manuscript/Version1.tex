@@ -33,14 +33,6 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-  pdftitle={Manuscript\_v0\_1},
-  pdfauthor={RFL, DTW, BPC},
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
 \usepackage{color}
 \usepackage{fancyvrb}
@@ -102,30 +94,37 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={BAM\_RAB v 0.1},
+  pdfauthor={RFL, DTW, BPC},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
 
-\title{Manuscript\_v0\_1}
+\title{BAM\_RAB v 0.1}
 \author{RFL, DTW, BPC}
-\date{2022-04-24}
+\date{2022-11-17}
 
 \begin{document}
 \maketitle
 
-\hypertarget{r-markdown}{%
-\subsection{R Markdown}\label{r-markdown}}
+\hypertarget{preliminary-analyses}{%
+\section{Preliminary Analyses}\label{preliminary-analyses}}
 
-TEST 12345
-asd123.
+This document contains preliminary analyses regarding the BAM\_RAB data
+set as it stands. These preliminary analyses focus on the following
+elements: As,Cd,Cu,Fe,Pb,Se,Zn. These elements were selected based on
+interest in the ``Big 5'' contaminants of concern plus Fe due to our
+interest in particle formation. I also added Se given the current
+interests of our extended research group, as well as some interesting
+parallels between the behavior of Se and Zn.
 
-TEST BRANCH.
-
-
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see \url{http://rmarkdown.rstudio.com}.
-
-When you click the \textbf{Knit} button a document will be generated
-that includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+\hypertarget{spatial-temporal-patterns-in-metal-accumulation-in-biomass-and-areal-stocks.}{%
+\subsection{Spatial-Temporal patterns in metal accumulation in biomass
+and areal
+stocks.}\label{spatial-temporal-patterns-in-metal-accumulation-in-biomass-and-areal-stocks.}}
 
 \begin{figure}
 \includegraphics[width=1\linewidth]{Figures/Cd_Burdens} \caption{A caption}\label{fig:unnamed-chunk-1}
@@ -154,7 +153,31 @@ You can also embed plots, for example:
 
 \includegraphics{Version1_files/figure-latex/pressure-1.pdf}
 
-Note that the \texttt{echo\ =\ FALSE} parameter was added to the code
-chunk to prevent printing of the R code that generated the plot.
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
+
+\#\#Study area
+
+\#\#Field Sampling
+
+\#\#\#Biomass
+
+\#\#\#Water
+
+\#\#Biomass sample processing
+
+\#\#Nutrient Analysis
+
+\#\#Metal Analysis
+
+\#\#Metabolic measurements
+
+\#\#Other?
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
 
 \end{document}

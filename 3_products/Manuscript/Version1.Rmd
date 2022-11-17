@@ -1,5 +1,5 @@
 ---
-title: "Manuscript_v0_1"
+title: "BAM_RAB v 0.1"
 author: "RFL, DTW, BPC"
 date: "`r Sys.Date()`"
 output:
@@ -11,15 +11,16 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Preliminary Analyses
 
-TEST 12345
+This document contains preliminary analyses regarding the BAM_RAB data set as it stands. These preliminary analyses focus on the following elements: As,Cd,Cu,Fe,Pb,Se,Zn. These elements were selected based on interest in the "Big 5" contaminants of concern plus Fe due to our interest in particle formation. I also added Se given the current interests of our extended research group, as well as some interesting parallels between the behavior of Se and Zn.
 
-TEST BRANCH
+## Spatial-Temporal patterns in metal accumulation in biomass and areal stocks.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+
 
 ```{r, echo=FALSE, fig.cap="A caption", out.width = '100%'}
 knitr::include_graphics("Figures/Cd_Burdens.jpg")
@@ -39,4 +40,33 @@ You can also embed plots, for example:
 plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# Methods
+
+##Study area
+
+##Field Sampling
+
+###Biomass
+
+###Water
+
+##Biomass sample processing
+
+##Nutrient Analysis
+
+##Metal Analysis
+
+##Metabolic measurements
+
+##Other?
+
+# Results
+
+ 
+# Discussion
+
+
+
+
+
