@@ -1,114 +1,146 @@
+library("corrplot")                               # Load corrplot
+library(tidyverse)
+library(readr)
+library(plyr)
+library(dplyr)
+
 alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP.csv"))
 
 alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE, format = "%m/%d/%Y")
 
 names(alldata)
 
-COMPARTMENTS <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"| alldata$SAMPLE_DESCRIPTOR == "EPIP" | alldata$SAMPLE_DESCRIPTOR == "FILA"),]
-
-nrow(COMPARTMENTS)
-
 #Big 5
 
-#PCA.DF<-as.data.frame(na.omit(COMPARTMENTS[,c(13,19,22,25,35,40,49)]))
+COR.DF<-as.data.frame(na.omit(alldata[,c(13,19,22,25,35,49)]))
 
-#PCA.DF<-log(PCA.DF)
+names(COR.DF)<- c("As","Cd","Cu","Fe","Pb","Zn")
 
-#names(PCA.DF)<- c("As","Cd","Cu","Fe","Pb","Se","Zn")
+cor(COR.DF)
 
-#cor(PCA.DF)
+corrplot(cor(COR.DF), method = "circle", lwd=2) 
 
-#corrplot(cor(PCA.DF), method = "circle", lwd=2) 
+#Alldata
 
-#Least VIF
+EPIL.COR.DF2 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
 
-PCA.DF<-as.data.frame(na.omit(COMPARTMENTS[,c(17,18,20,31,35,36,40,41,44)]))
+EPIP.COR.DF2 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
-nrow(PCA.DF)
+FILA.COR.DF2 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
-PCA.DF<-log(PCA.DF)
+EPIL.COR.DF2<-as.data.frame(na.omit(EPIL.COR.DF2[,c(13:49)]))
 
-nrow(PCA.DF)
+EPIP.COR.DF2<-as.data.frame(na.omit(EPIP.COR.DF2[,c(13:49)]))
 
-names(PCA.DF)<- c("Be","Ca","Co","Mo","Pb","S","Se","Si","Sn")
-
-cor(PCA.DF)
-
-corrplot(cor(PCA.DF), method = "circle", lwd=2) 
-
-names(COMPARTMENTS)
-
-colors <- c("blue", "darkgreen", "red")
-colors <- colors[as.numeric(factor(na.omit(COMPARTMENTS$SAMPLE_DESCRIPTOR)))]
-
-mydata <- PCA.DF
-
-my.scaled.data <- as.matrix(scale(mydata, center = TRUE, scale = TRUE))
-
-view(my.scaled.data)
-
-ncol(my.scaled.data)
-
-my.prc <- prcomp(na.omit(my.scaled.data), center = TRUE, scale = TRUE)
-
-wa<-data.frame(colors,my.prc$x[,1],my.prc$x[,2])
-
-plot(my.prc)
-
-sd <- my.prc$sdev
-correlations <- t(t(my.prc$rotation)*sd)
-
-summary(my.prc)
+FILA.COR.DF2<-as.data.frame(na.omit(FILA.COR.DF2[,c(13:49)]))
 
 #dev.new()
 
-plot	(my.prc$x,
-      pch=c(0,1,2)[as.numeric(factor(COMPARTMENTS$SAMPLE_DESCRIPTOR))],
-      xlim=c(-max(abs(range(my.prc$x[,1]))),max(abs(range(my.prc$x[,1])))),	
-      ylim=c(-max(abs(range(my.prc$x[,2]))),max(abs(range(my.prc$x[,2])))), 
-      cex.lab=1.2, cex.axis=1.1, cex.main=1.4, cex.sub=1.4, 
-      col=colors
-        )
-#	col="black")
+corrplot(cor(FILA.COR.DF2), method = "circle", lwd=2) 
+
+#Selected
+
+EPIL.COR.DF3 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
+
+EPIP.COR.DF3 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
+
+FILA.COR.DF3 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 
-par(new=TRUE)
+#EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
 
-plot	(correlations[1,],
-      correlations[2,],
-      col="White",
-      xlim=c(-1,1),
-      ylim=c(-1,1),
-      xaxt="n",
-      yaxt="n",
-      xlab="",
-      ylab="")
+#EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
 
-arrows(0, 0, 
-       x1 = correlations[,1], 
-       y1 = correlations[,2], 
-       length = 0.1, angle = 30, lwd =2.0,
-       code = 2, col = par("fg"), 
-       lty = par("lty"))
+#FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
 
-text(	x=correlations[,1]*1.05,
-      y=correlations[,2]*1.05,
-      labels = names(PCA.DF), 
-      cex=0.7)
+EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(52,58,61,64,74,79,88)]))
 
-rownames(my.prc$rotation)
+EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(52,58,61,64,74,79,88)]))
 
-#legend('topright', legend = levels(wa$Stream), col = 1:4, cex = 1, pch = 19)
+FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(52,58,61,64,74,79,88)]))
 
-coordnames<-data.frame(correlations[,1]*1.1,correlations[,2]*1.1)
 
-coordnames
 
-axis(3)
-mtext("y2",side=4,line=2, col="Blue")
-axis(4)
-mtext("y2",side=4,line=2, col="Blue")
+par(mfrow = c(1,3), mar = c(2, 4, 4, 2))
 
-abline(h=c(0,0))
-abline(v=c(0,0))
+EPIL.TEST<-cor.mtest(EPIL.COR.DF3)
+
+corrplot(cor(EPIL.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=2, cex.main=3, sig.level = 0.05, insig = "blank", 
+         mar=c(0,0,0,0), title="\n\n Epilithon", diag=FALSE, order = "hclust", type="upper") 
+
+corrplot(cor(EPIP.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=2, cex.main=3, sig.level = 0.05, insig = "blank", 
+         mar=c(0,0,0,0), title="\n\n Epiphytes", diag=FALSE, order = "hclust", type="upper") 
+
+corrplot(cor(FILA.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=2, cex.main=3, sig.level = 0.05, insig = "blank", 
+         mar=c(0,0,0,0), title="\n\n Filamentous", diag=FALSE, order = "hclust", type="upper") 
+
+cor(EPIL.COR.DF3)
+cor(EPIP.COR.DF3)
+cor(FILA.COR.DF3)
+
+###########GEARING UP FOR MULTIVARIATE ANALYSIS###################
+
+###Testing compartment datasets for variance inflation factor.
+
+library(usdm)
+
+max.VIF<-10
+
+EPIL.RED<-data.frame(EPIL.COR.DF3)
+VIF.EPIL<-vif(EPIL.RED)
+
+repeat {   
+  if (max(VIF.EPIL[,2])>max.VIF) {
+    VIF.EPIL<-vif(EPIL.RED)
+    EPIL.RED <- within(EPIL.RED, rm(list=VIF.EPIL[which.max(VIF.EPIL[,2]),1]))
+  } else {
+    break
+  }
+}
+
+EPIP.RED<-data.frame(EPIP.COR.DF3)
+VIF.EPIP<-vif(EPIP.RED)
+
+repeat {   
+  if (max(VIF.EPIP[,2])>max.VIF) {
+    VIF.EPIP<-vif(EPIP.RED)
+    EPIP.RED <- within(EPIP.RED, rm(list=VIF.EPIP[which.max(VIF.EPIP[,2]),1]))
+  } else {
+    break
+  }
+}
+
+FILA.RED<-data.frame(FILA.COR.DF3)
+VIF.FILA<-vif(FILA.RED)
+
+repeat {   
+  if (max(VIF.FILA[,2])>max.VIF) {
+    VIF.FILA<-vif(FILA.RED)
+    FILA.RED <- within(FILA.RED, rm(list=VIF.FILA[which.max(VIF.FILA[,2]),1]))
+  } else {
+    break
+  }
+}
+
+ALL.COR.DF2<-as.data.frame(na.omit(alldata[,c(13:49)]))
+
+#Selected
+
+ALL.COR.DF3<-as.data.frame(na.omit(alldata[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
+
+ALL.RED<-data.frame(ALL.COR.DF3)
+VIF.ALL<-vif(ALL.RED)
+
+repeat {   
+  if (max(VIF.ALL[,2])>max.VIF) {
+    VIF.ALL<-vif(ALL.RED)
+    ALL.RED <- within(ALL.RED, rm(list=VIF.ALL[which.max(VIF.ALL[,2]),1]))
+  } else {
+    break
+  }
+}
+
+
+
+
 

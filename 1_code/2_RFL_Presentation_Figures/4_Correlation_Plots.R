@@ -1,5 +1,4 @@
 library("corrplot")                               # Load corrplot
-
 library(tidyverse)
 library(readr)
 library(plyr)
@@ -48,12 +47,28 @@ EPIP.COR.DF3 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 FILA.COR.DF3 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 
-EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
+#EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
 
-EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
+#EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
 
-FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
+#FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
 
+EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(52,58,61,64,74,79,88)]))
+
+EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(52,58,61,64,74,79,88)]))
+
+FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(52,58,61,64,74,79,88)]))
+
+EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(52,58,61,64,74,79,88)]))
+
+EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(52,58,61,64,74,79,88)]))
+
+FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(52,58,61,64,74,79,88)]))
+
+
+
+
+dev.new()
 
 par(mfrow = c(1,3), mar = c(2, 4, 4, 2))
 
@@ -71,70 +86,3 @@ corrplot(cor(FILA.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=2, cex.
 cor(EPIL.COR.DF3)
 cor(EPIP.COR.DF3)
 cor(FILA.COR.DF3)
-
-###########GEARING UP FOR MULTIVARIATE ANALYSIS###################
-
-###Testing compartment datasets for variance inflation factor.
-
-library(usdm)
-
-max.VIF<-10
-
-EPIL.RED<-data.frame(EPIL.COR.DF3)
-VIF.EPIL<-vif(EPIL.RED)
-
-repeat {   
-  if (max(VIF.EPIL[,2])>max.VIF) {
-    VIF.EPIL<-vif(EPIL.RED)
-    EPIL.RED <- within(EPIL.RED, rm(list=VIF.EPIL[which.max(VIF.EPIL[,2]),1]))
-  } else {
-    break
-  }
-}
-
-EPIP.RED<-data.frame(EPIP.COR.DF3)
-VIF.EPIP<-vif(EPIP.RED)
-
-repeat {   
-  if (max(VIF.EPIP[,2])>max.VIF) {
-    VIF.EPIP<-vif(EPIP.RED)
-    EPIP.RED <- within(EPIP.RED, rm(list=VIF.EPIP[which.max(VIF.EPIP[,2]),1]))
-  } else {
-    break
-  }
-}
-
-FILA.RED<-data.frame(FILA.COR.DF3)
-VIF.FILA<-vif(FILA.RED)
-
-repeat {   
-  if (max(VIF.FILA[,2])>max.VIF) {
-    VIF.FILA<-vif(FILA.RED)
-    FILA.RED <- within(FILA.RED, rm(list=VIF.FILA[which.max(VIF.FILA[,2]),1]))
-  } else {
-    break
-  }
-}
-
-ALL.COR.DF2<-as.data.frame(na.omit(alldata[,c(13:49)]))
-
-#Selected
-
-ALL.COR.DF3<-as.data.frame(na.omit(alldata[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
-
-ALL.RED<-data.frame(ALL.COR.DF3)
-VIF.ALL<-vif(ALL.RED)
-
-repeat {   
-  if (max(VIF.ALL[,2])>max.VIF) {
-    VIF.ALL<-vif(ALL.RED)
-    ALL.RED <- within(ALL.RED, rm(list=VIF.ALL[which.max(VIF.ALL[,2]),1]))
-  } else {
-    break
-  }
-}
-
-
-
-
-

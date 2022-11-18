@@ -76,6 +76,11 @@ knitr::include_graphics("Figures/7.jpeg")
 
 
 
+
+
+
+
+
 \newpage
 
 ## Correlation between metals among compartments
@@ -89,6 +94,10 @@ PCA analysis was performed in a two tier fashion. Firstly, I performed a PCA ana
 
 ```{r, echo=FALSE, fig.cap="Correlation plots of BIG5+ elemental contents for all biomass compartments combined.", out.width = '100%'}
 knitr::include_graphics("Figures/CORRPLOT_1_BIG5PLUS.jpeg")
+```
+
+```{r, echo=FALSE, fig.cap="Correlation plots of BIG5+ elemental contents for all biomass compartments in separate.", out.width = '100%'}
+knitr::include_graphics("Figures/CORRPLOT_1_BIG5_By_Compartment.jpeg")
 ```
 
 \newpage
@@ -156,6 +165,9 @@ Next steps are to extract PCA scores for samples and see how they vary with time
 
 # Results
 
+##General patterns
+ 
+Are we in a position to start thinking about these?
  
 # Discussion
 
