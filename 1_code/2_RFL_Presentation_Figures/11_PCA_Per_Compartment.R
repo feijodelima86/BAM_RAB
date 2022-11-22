@@ -18,9 +18,8 @@ LABELS<-LABELS[order(LABELS$SAMPLE_DESCRIPTOR, decreasing = F), ]
 PCA.DF<-as.data.frame(LABELS[,c(7:ncol(LABELS))])
 names(PCA.DF)<- c("As","Cd","Cu","Fe","Pb","Se","Zn")
 
-#dev.new()
 cor(PCA.DF)
-corrplot(cor(PCA.DF), method = "circle", lwd=2) 
+#corrplot(cor(PCA.DF), method = "circle", lwd=2) 
 
 ###PCA###
 
@@ -29,7 +28,7 @@ my.data <- PCA.DF
 my.data <- as.matrix(scale(my.data, center = TRUE, scale = TRUE))
 my.prc <- prcomp(na.omit(my.data))
 
-plot(my.prc)
+#plot(my.prc)
 
 pca_scores<-scores(my.prc)
 
@@ -41,11 +40,13 @@ summary(my.prc)
 
 #####PLOT####
 
-rbPal <- colorRampPalette(c("beige",colors()[89]))
+#rbPal <- colorRampPalette(c("beige",colors()[89]))
+
+rbPal <- colorRampPalette(c(colors()[89],"cyan"))
 
 names(LABELS)
 
-LABELS$Col <- rbPal(5)[as.numeric(cut(log(LABELS$OM.AREA.g.m2),breaks = 5))]
+LABELS$Col <- rbPal(5)[as.numeric(cut(log(LABELS$PHICOCYANIN.MG.M2),breaks = 5))]
 
 #colors <- c(colors()[89], "gold", "chartreuse")
 #colors <- colors[as.numeric(factor(na.omit(LABELS$SAMPLE_DESCRIPTOR)))]
@@ -71,7 +72,8 @@ legend(x = "topleft", legend = levels(factor(LABELS$SAMPLE_DESCRIPTOR)),
        cex = 1, 
        box.lwd=3,
        col = "black", 
-       pt.bg=c(colors()[89], "gold", "chartreuse"), pt.lwd=3)
+       pt.bg=colors()[89], 
+        pt.lwd=3)
 
 
 #panel.first= {
@@ -134,7 +136,7 @@ names(PCA.DF)<- c("As","Cd","Cu","Fe","Pb","Se","Zn")
 
 #dev.new()
 cor(PCA.DF)
-corrplot(cor(PCA.DF), method = "circle", lwd=2) 
+#corrplot(cor(PCA.DF), method = "circle", lwd=2) 
 
 ###PCA###
 
@@ -143,7 +145,7 @@ my.data <- PCA.DF
 my.data <- as.matrix(scale(my.data, center = TRUE, scale = TRUE))
 my.prc <- prcomp(na.omit(my.data))
 
-plot(my.prc)
+#plot(my.prc)
 
 pca_scores<-scores(my.prc)
 
@@ -157,9 +159,11 @@ summary(my.prc)
 
 rbPal <- colorRampPalette(c("lightyellow","gold"))
 
+rbPal <- colorRampPalette(c("gold","cyan"))
+
 names(LABELS)
 
-LABELS$Col <- rbPal(30)[as.numeric(cut(log(LABELS$OM.AREA.g.m2),breaks = 30))]
+LABELS$Col <- rbPal(30)[as.numeric(cut(log(LABELS$PHICOCYANIN.MG.M2),breaks = 30))]
 
 #colors <- c(colors()[89], "gold", "chartreuse")
 #colors <- colors[as.numeric(factor(na.omit(LABELS$SAMPLE_DESCRIPTOR)))]
@@ -250,7 +254,7 @@ names(PCA.DF)<- c("As","Cd","Cu","Fe","Pb","Se","Zn")
 
 #dev.new()
 cor(PCA.DF)
-corrplot(cor(PCA.DF), method = "circle", lwd=2) 
+#corrplot(cor(PCA.DF), method = "circle", lwd=2) 
 
 ###PCA###
 
@@ -259,7 +263,7 @@ my.data <- PCA.DF
 my.data <- as.matrix(scale(my.data, center = TRUE, scale = TRUE))
 my.prc <- prcomp(na.omit(my.data))
 
-plot(my.prc)
+#plot(my.prc)
 
 pca_scores<-scores(my.prc)
 
@@ -281,8 +285,9 @@ LABELS$Col <- rbPal(5)[as.numeric(cut(LABELS$OM.AREA.g.m2+1,breaks = 5))]
 #colors <- colors[as.numeric(factor(na.omit(LABELS$SAMPLE_DESCRIPTOR)))]
 
 #dev.new()
+plot3<-
 
-plot	(my.prc$x,
+  plot	(my.prc$x,
       pch=c(23),
       xlim=c(-max(abs(range(my.prc$x[,1]))),max(abs(range(my.prc$x[,1])))),	
       ylim=c(-max(abs(range(my.prc$x[,2]))),max(abs(range(my.prc$x[,2])))), 
@@ -350,3 +355,5 @@ mtext("y2",side=4,line=2, col="Blue")
 
 abline(h=c(0,0))
 abline(v=c(0,0))
+
+

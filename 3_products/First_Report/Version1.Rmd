@@ -138,10 +138,23 @@ knitr::include_graphics("Figures/PCA_2_BIG5PLUS.jpeg")
 knitr::include_graphics("Figures/PCA_2_LEASTVIF.jpeg")
 ```
 
+## Principal component analyses of contents by compartments and OM/Phycocyanin.
+
+Following previous analyses I decided to perform individual PCAs for each compartment 
+
+
+```{r, echo=FALSE, out.width="20%",out.height="20%",fig.show='hold',fig.align='center',fig.cap="tHIS STUFF. Secondary X and Y axes (top and right) indicate correlation between variables and principal components.", out.width = '100%'}
+knitr::include_graphics(c("Figures/PCA_4_BIG5PLUS_EPIP_PHYCO.jpeg","Figures/PCA_4_BIG5PLUS_EPIL_PHYCO.jpeg"))
+```
+
+
+```{r, echo=FALSE,out.width="49%",out.height="49%",fig.show='hold',
+fig.align='center', fig.cap="This is the main caption - Years 2020 - 2030 - the main caption."}
+knitr::include_graphics(c("CAT.png","CAT.png"))
 
 \newpage
 
-Next steps are to extract PCA scores for samples and see how they vary with time and pigment contents. 
+Next steps are to extract PCA scores for samples and see how they vary with time. 
 
 ## Methods
 

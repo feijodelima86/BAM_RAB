@@ -6,8 +6,6 @@ alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP.csv"))
 
 alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE, format = "%m/%d/%Y")
 
-names(alldata)
-
 COMPARTMENTS <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
 ####Least VIF####
@@ -51,16 +49,16 @@ summary(my.prc)
 
 #####PLOT####
 
-rbPal <- colorRampPalette(c(colors()[89],'cyan'))
+rbPal <- colorRampPalette(c("beige",colors()[89]))
 
 names(LABELS)
 
-LABELS$Col <- rbPal(10)[as.numeric(cut(LABELS$OM.AREA.g.m2,breaks = 15))]
+LABELS$Col <- rbPal(5)[as.numeric(cut(LABELS$OM.AREA.g.m2,breaks = 5))]
 
 #colors <- c(colors()[89], "gold", "chartreuse")
 #colors <- colors[as.numeric(factor(na.omit(LABELS$SAMPLE_DESCRIPTOR)))]
 
-dev.new()
+#dev.new()
 
 plot	(my.prc$x,
       pch=c(23),
@@ -118,8 +116,6 @@ rownames(my.prc$rotation)
 
 box(lwd=3)
 
-#legend('topright', legend = levels(wa$Stream), col = 1:4, cex = 1, pch = 19)
-
 coordnames<-data.frame(correlations[,1]*1.1,correlations[,2]*1.1)
 
 coordnames
@@ -131,7 +127,4 @@ mtext("y2",side=4,line=2, col="Blue")
 
 abline(h=c(0,0))
 abline(v=c(0,0))
-
-colfunc <- colorRampPalette(c("white","black"))
-
 
