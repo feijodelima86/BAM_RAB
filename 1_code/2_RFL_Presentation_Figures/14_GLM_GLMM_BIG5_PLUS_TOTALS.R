@@ -46,7 +46,7 @@ BIG5.GLM <- BIG5.LABELS[,-4] %>% group_by(SAMPLING_DATE, SITE, FIELD.REP) %>% su
 
 ####GLMS####
 
-mix.int <- glm(Cd ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
+mix.int <- glm(As ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
                family=gaussian)
 
 summary(mix.int)
@@ -63,24 +63,20 @@ levels(BIG5.GLM$SITE)
 
 ## add predicted values (on response scale) to prediction frame
 
-pframe$Cd <- predict.glm(mix.int,newdata=pframe,type="response")
+pframe$As <- predict.glm(mix.int,newdata=pframe,type="response")
 
 
 BIG5.GLM$SITE <- factor(BIG5.GLM$SITE, levels = c("WS","DL","GR","GC","BG","BN"), ordered = F)
 
-plot2<- ggplot(BIG5.GLM, aes(SAMPLING_DATE, Cd, col = SITE))+
+plot2<- ggplot(BIG5.GLM, aes(SAMPLING_DATE, As, col = SITE))+
   geom_point() +
   geom_line(data=pframe)+
-  scale_y_continuous(trans='log10', oob=squish)
-  #geom_smooth(method = "glm", se = TRUE,
-  #method.args = list(family = "gaussian"), linetype = "dashed")
+  scale_y_continuous(trans='pseudo_log', oob=squish)+
+  geom_smooth(method="loess" ,se = TRUE,
+  method.args = list(family = "gaussian"), linetype = "dashed")
   ## use prediction data here
 
 #dev.new()
 
 plot2 + facet_grid( ~ SITE)
-
-
-
-
 
