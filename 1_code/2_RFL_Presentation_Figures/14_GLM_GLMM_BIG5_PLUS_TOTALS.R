@@ -2,6 +2,8 @@ library("readr")
 library("dplyr")
 library("ggplot2"); theme_set(theme_bw())
 library("scales")
+library("performance")
+library("splines")
 
 #alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP.csv"))
 alldata <- read_csv("2_incremental/20220420_STANDING_CROP_Rafa_Interpolation_Dont_Use.csv")
@@ -14,7 +16,7 @@ names(COMPARTMENTS)<-c("ROWNUM",names(COMPARTMENTS[c(2:ncol(COMPARTMENTS))]))
   
 COMPARTMENTS$ROWNUM==1
 
-COMPARTMENTS <- COMPARTMENTS[COMPARTMENTS$ROWNUM != 1, ]
+#COMPARTMENTS <- COMPARTMENTS[COMPARTMENTS$ROWNUM != 1, ]
 
 
 #COMPARTMENTS <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
@@ -45,6 +47,12 @@ BIG5.LABELS[,-4]
 BIG5.GLM <- BIG5.LABELS[,-4] %>% group_by(SAMPLING_DATE, SITE, FIELD.REP) %>% summarise_all(sum)
 
 ####GLMS####
+
+mix.int <- glm(As ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
+               family=gaussian)
+
+mix.int <- glm(As ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
+               family=gaussian)
 
 mix.int <- glm(As ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
                family=gaussian)
@@ -80,3 +88,4 @@ plot2<- ggplot(BIG5.GLM, aes(SAMPLING_DATE, As, col = SITE))+
 
 plot2 + facet_grid( ~ SITE)
 
+r2_nagelkerke(mix.int)

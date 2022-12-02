@@ -25,13 +25,16 @@ knitr::knit_hooks$set(plot = function(x, options)  {
 
 This document contains preliminary analyses regarding the BAM_RAB data set as it stands. These preliminary analyses focus on the following elements: As,Cd,Cu,Fe,Pb,Se and Zn. These elements were selected based on interest in the "Big 5" contaminants of concern plus Fe due to our interest in particle formation. I also added Se given the current interests of our extended research group, as well as some interesting parallels between the behavior of Se and Zn.
 
-## 1. Temporal patterns in metal accumulation in biomass contents (mg/g).
+
+## 1. Spatial-Temporal patterns in metal accumulation in stocks (mg/g).
+
+This first set of figures represent the first stab at investigating how time and location downstream of the 6 sites investigated explain metal stocks in primary producers. In order to do so, I performed General Linear Models (GLMs) using date and site distance as predictors for variability. Predicted variable for all plots is total stocks (the sum of Epilithic, Filamentous and Epiphitic stocks) for all the BIG5+ elements.
 
 
 
 ## 1. Temporal patterns in metal accumulation in biomass contents (mg/g).
 
-The following figures represent the patterns for all samples over time within the three biomass compartments, all sites included. The code for generation all these figures is located under 1_code/2_RFL_Presentation_Figures/1_Barplots_Time_All.R
+
 
 Arsenic (Fig.1) seems to be the only element that actually decreases over time as the growing season progresses. I think this would be the main suspect when we actually try to trace the relationship between metals in algae and metals in water.
 
