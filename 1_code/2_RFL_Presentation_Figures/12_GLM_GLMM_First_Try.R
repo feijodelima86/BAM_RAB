@@ -106,9 +106,7 @@ plot2<- ggplot(BIG5.GLM, aes(SAMPLING_DATE, Se, col = SITE_DISTANCE))+
                      trans='pseudo_log', oob=squish)+
   geom_smooth(method="loess" ,se = TRUE,
               method.args = list(family = "gaussian"), linetype = "dashed")
-#dev.new()
-
-?geom_line
+dev.new()
 
 plot2 + facet_grid( ~ SITE_DISTANCE)
 
