@@ -7,7 +7,6 @@ alldata <- read.csv("2_incremental/20220420_STANDING_CROP.csv")
 
 alldata$SAMPLING_DATE<-factor(alldata$SAMPLING_DATE,levels = c("6/22/2021", "7/7/2021", "7/20/2021", "8/3/2021", "8/17/2021","9/9/2021", "9/22/2021", "10/13/2021"), ordered=TRUE)
 
-
 # Variable date to factor
 
 dfEPIL <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]

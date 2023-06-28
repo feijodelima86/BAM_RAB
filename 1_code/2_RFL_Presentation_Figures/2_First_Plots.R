@@ -23,13 +23,13 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 #Selected site 
 
-ssite<-"GC"
+ssite<-"BN"
 
 # Selected element
 
 names(alldata)
 
-n1<-87
+n1<-7
 
 mult=1
 
@@ -116,7 +116,7 @@ ardat3 <- lapply(1:L,function(x){
 #dev.new(width=10, height=7, noRStudioGD = TRUE)
 plot(ALL.SUM[,1], ALL.SUM[,5],
      type='n',
-     ylim=c(20, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 100, f = ceiling)),
+     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 30, f = ceiling)),
      xlim= c(as.Date("2021-06-20"),as.Date("2021-10-30")),
      ylab=NA, 
      yaxt = "n",
@@ -127,14 +127,14 @@ plot(ALL.SUM[,1], ALL.SUM[,5],
 )
 
 
-axis(side = 2, las=1, font.axis=1, cex.axis=1.5)
+axis(side = 2, las=1, font.axis=2, cex.axis=2)
 
 
-plyr::round_any(range(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), 10, f = ceiling)
+plyr::round_any(range(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), 20, f = ceiling)
 
 at = seq(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), 175, f = ceiling), length.out=5)
 
-axis.Date(1, at=seq(as.Date("2021-06-20"), as.Date("2021-10-30"), "1 week"), las=1, font.axis=2, cex.axis=1.5, format="%d-%b")
+axis.Date(1, at=seq(as.Date("2021-06-20"), as.Date("2021-10-30"), "1 week"), las=1, font.axis=2, cex.axis=2, format="%d-%b")
 
 #add polygons
 

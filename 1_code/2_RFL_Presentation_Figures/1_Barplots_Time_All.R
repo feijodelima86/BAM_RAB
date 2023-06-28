@@ -49,7 +49,7 @@ aty <- seq(0, max(ALL.SUM$MEAN.ALL, na.rm=TRUE), length.out=5)
 
 names(ALL.SUM)
 
-#dev.new()
+dev.new()
 
 par(mar=c(3.5,6,3,1))
 

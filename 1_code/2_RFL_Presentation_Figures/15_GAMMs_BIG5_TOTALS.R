@@ -47,9 +47,7 @@ names(BIG5.GLM)
 
 K=7
 
-mydata<-na.omit(BIG5.GLM[,c(1,5,6)])
-
-
+mydata<-data.frame(na.omit(BIG5.GLM[,c(1,5,6)]))
 
 
 #mydata[,3]<-log10(mydata[,3])
@@ -65,46 +63,28 @@ x <- mydata[ ,1]
 y <- mydata[ ,2]
 z <- mydata[ ,3]
 
-#z <- log10(mydata[ ,3])
+z <- log10(mydata[ ,3])
+
+
+names(mydata)<-c("x","y","z")
 
 mydata <- transform(mydata, ndate = as.numeric(x),
                     nyear  = as.numeric(format(x, '%Y')),
                     nmonth = as.numeric(format(x, '%m')),
-                    doy    = as.numeric(format(x, '%j')))
-
-names(mydata)<-c("x","y","z")
-
-summary(lm4)
-
-anova(lm4)
-
-
-K=7
-
-?gam
+                    day    = as.numeric(format(x, '%j')))
 
 mod_gam <- gam(z ~ s(ndate, k=8)+s(y, k=6), data=mydata)
 
-
-dat <- data.frame(mydata[,3])
-rbPal <- colorRampPalette(c('blue','red'))
-dat$Col <- rbPal(10)[as.numeric(cut(mydata[,3],breaks = 10))]
-
-p <- quote({
-  axis(1, at = mx, labels = lx)
-  axis(2, at = my, labels = ly)
-  with(mydata, points(x, y, pch=19, col="black", cex=0.8))
-})
 
 #dev.new(width=12, height=10)
 
 
 
-plot<-visreg2d(mod_gam, xvar='ndate', yvar='y', scale='response',
-               #			plot.type="persp",
+visreg2d(mod_gam, xvar='ndate', yvar='y', scale='response',
+#               			plot.type="persp",
                xlab=xlab, ylab=ylab, 
                main=NULL, 
-               plot.axes=p, 
+#               plot.axes=p, 
                #               zlim=c(min(z),max(z)),
                #               zlim=c(0,30000),
                color.palette=colorRampPalette(c("white","red", "darkred")),

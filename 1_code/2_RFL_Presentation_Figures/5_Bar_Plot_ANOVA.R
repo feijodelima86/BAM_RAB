@@ -21,11 +21,11 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
-Ylabel=expression(bold("As Burden (mg/g)"))
+Ylabel=expression(bold("Cu Contents (mg/g)"))
 
 names(alldata)
 
-n1<-49
+n1<-22
 
 mult=1
 
@@ -55,7 +55,7 @@ tabbedSE <- tapply(ALL.SUM$STDER.ALL, list(ALL.SUM$SAMPLE_DESCRIPTOR),
                    function(x) c(x = x))
 
 dev.new()
-par(mar=c(9, 9, 9, 9))
+par(mar=c(7, 7, 7, 7))
 barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR, data = ALL.SUM, 
                       beside = TRUE, 
                       ylim = c(0.001, max(ALL.SUM$MEAN.ALL+ALL.SUM$STDER.ALL, na.rm=T)*3),
@@ -69,7 +69,7 @@ barCenters <- barplot(MEAN.ALL ~ SAMPLE_DESCRIPTOR, data = ALL.SUM,
 )
 
 segments(barCenters, tabbedMeans, barCenters,
-         tabbedMeans + tabbedSE, lwd = 2)
+         tabbedMeans + tabbedSE, lwd = 3)
 
 arrows(barCenters, tabbedMeans, barCenters,
        tabbedMeans + tabbedSE, lwd = 2, angle = 90,

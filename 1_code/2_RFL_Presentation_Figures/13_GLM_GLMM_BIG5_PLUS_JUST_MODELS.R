@@ -39,14 +39,14 @@ summary(mix.int)
 
 ####Cd####
 
-mix.int <- glm(Cd.1 ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
+mix.int <- glm(Cd ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
                family=gaussian)
 
 summary(mix.int)
 
 ####Cu####
 
-mix.int <- glm(Cu.1 ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
+mix.int <- glm(Cu ~ SAMPLING_DATE * SITE, data = BIG5.GLM, 
                family=gaussian)
 
 summary(mix.int)

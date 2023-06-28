@@ -10,7 +10,7 @@ alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
 names(alldata)
 
 n<-7
-n2<-49
+n2<-22
 
 
 dfEPIL <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
@@ -21,7 +21,7 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 
 Xlabel=expression(bold(paste("Standing Crop"~"(g/m"^"2"~")")))
-Ylabel=expression(bold("Zn Burden (mg/g)"))
+Ylabel=expression(bold("Cu Content (mg/g)"))
 
 
 #windows(width = 15, height = 25)

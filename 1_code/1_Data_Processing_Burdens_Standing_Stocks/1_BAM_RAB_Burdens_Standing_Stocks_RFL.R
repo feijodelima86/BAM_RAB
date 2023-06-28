@@ -18,6 +18,10 @@ write.csv(BB.FINAL, paste0("2_incremental/",gsub("-", "", Sys.Date()),"_BB_CURRE
 
 INTEGRATED_BIOMASS_2021_03_10 <- read.csv("0_data/external/FLIPPED_BIOMASS_2021_03_10.csv", fileEncoding="UTF-8-BOM")
 
+names(INTEGRATED_BIOMASS_2021_03_10)
+
+unique(INTEGRATED_BIOMASS_2021_03_10$SITE)
+
 #Renaming columns so reduce works
 
 names(INTEGRATED_BIOMASS_2021_03_10)[names(INTEGRATED_BIOMASS_2021_03_10) == 'DATE'] <- 'SAMPLING_DATE'

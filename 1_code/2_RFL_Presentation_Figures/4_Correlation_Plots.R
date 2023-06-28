@@ -1,8 +1,8 @@
-library("corrplot")                               # Load corrplot
 library(tidyverse)
 library(readr)
 library(plyr)
 library(dplyr)
+library("corrplot")                               # Load corrplot
 
 alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP.csv"))
 
@@ -12,9 +12,11 @@ names(alldata)
 
 #Big 5
 
-COR.DF<-as.data.frame(na.omit(alldata[,c(13,19,22,25,35,49)]))
 
-names(COR.DF)<- c("As","Cd","Cu","Fe","Pb","Zn")
+
+COR.DF<-as.data.frame(na.omit(alldata[,c(13,19,22,25,35,28,49,34,36,32,26,28,43,11,33)+39]))
+
+names(COR.DF)<- c("As","Cd","Cu","Fe","Pb","Zn","P","S","Na","Mg","K","Ca","Si","Al","Ni")
 
 cor(COR.DF)
 
@@ -47,24 +49,11 @@ EPIP.COR.DF3 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 FILA.COR.DF3 <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 
-#EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
+EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(13,19,22,25,35,28,49,11,33,34,36,32,26,18,43)]))
 
-#EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
+EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(13,19,22,25,35,28,49,11,33,34,36,32,26,18,43)]))
 
-#FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(13,16,17,18,19,20,21,22,23,26,31,35,36,40,41,44,46,47,48)]))
-
-EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(52,58,61,64,74,79,88)]))
-
-EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(52,58,61,64,74,79,88)]))
-
-FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(52,58,61,64,74,79,88)]))
-
-EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(52,58,61,64,74,79,88)]))
-
-EPIP.COR.DF3<-as.data.frame(na.omit(EPIP.COR.DF3[,c(52,58,61,64,74,79,88)]))
-
-FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(52,58,61,64,74,79,88)]))
-
+FILA.COR.DF3<-as.data.frame(na.omit(FILA.COR.DF3[,c(13,19,22,25,35,28,49,11,33,34,36,32,26,18,43)]))
 
 
 
@@ -74,14 +63,14 @@ par(mfrow = c(1,3), mar = c(2, 4, 4, 2))
 
 EPIL.TEST<-cor.mtest(EPIL.COR.DF3)
 
-corrplot(cor(EPIL.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=2, cex.main=3, sig.level = 0.05, insig = "blank", 
-         mar=c(0,0,0,0), title="\n\n Epilithon", diag=FALSE, order = "hclust", type="upper") 
+corrplot(cor(EPIL.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=1.5, cex.main=3, sig.level = 0.05, insig = "blank", 
+         mar=c(0,0,0,0), title="\n\n Epilithon", diag=FALSE, order = "original", type="upper", col.lim=c(-1,1)) 
 
-corrplot(cor(EPIP.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=2, cex.main=3, sig.level = 0.05, insig = "blank", 
-         mar=c(0,0,0,0), title="\n\n Epiphytes", diag=FALSE, order = "hclust", type="upper") 
+corrplot(cor(EPIP.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=1.5, cex.main=3, sig.level = 0.05, insig = "blank", 
+         mar=c(0,0,0,0), title="\n\n Epiphytes", diag=FALSE, order = "original", type="upper", col.lim=c(-1,1)) 
 
-corrplot(cor(FILA.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=2, cex.main=3, sig.level = 0.05, insig = "blank", 
-         mar=c(0,0,0,0), title="\n\n Filamentous", diag=FALSE, order = "hclust", type="upper") 
+corrplot(cor(FILA.COR.DF3), method = "circle", lwd=2, tl.cex = 2, cl.cex=1.5, cex.main=3, sig.level = 0.05, insig = "blank", 
+         mar=c(0,0,0,0), title="\n\n Filamentous", diag=FALSE, order = "original", type="upper", col.lim=c(-1,1)) 
 
 cor(EPIL.COR.DF3)
 cor(EPIP.COR.DF3)
