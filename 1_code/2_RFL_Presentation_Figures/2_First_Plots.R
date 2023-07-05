@@ -29,7 +29,9 @@ ssite<-"BN"
 
 names(alldata)
 
-n1<-7
+# 7 = biomass, 58 = Cd 73 = Pb, 70=Mo , Cu=61, As=52
+
+n1<-52
 
 mult=1
 
@@ -116,7 +118,7 @@ ardat3 <- lapply(1:L,function(x){
 #dev.new(width=10, height=7, noRStudioGD = TRUE)
 plot(ALL.SUM[,1], ALL.SUM[,5],
      type='n',
-     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 30, f = ceiling)),
+     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 3.5, f = ceiling)),
      xlim= c(as.Date("2021-06-20"),as.Date("2021-10-30")),
      ylab=NA, 
      yaxt = "n",

@@ -1,17 +1,28 @@
+library(plyr)
 library(tidyverse)
 library(readr)
-library(plyr)
-library(dplyr)
 
-alldata <- read.csv("2_incremental/20220310_STANDING_CROP.csv")
+
+alldata <- read.csv("2_incremental/20220420_STANDING_CROP.csv")
 
 alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
 
 names(alldata)
 
-n<-7
-n2<-22
+# Selecting variables
 
+n<-7
+n2<-13 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
+
+#Names of axes
+
+Xlabel=expression(bold(paste("Standing Crop"~"(g/m"^"2"~")")))
+Ylabel=expression(bold("As Burden (mg/g)"))
+
+#Subsetting by compartment
+
+x <- alldata[,n] 
+y <- alldata[,n2] 
 
 dfEPIL <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
 
@@ -19,29 +30,24 @@ dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
 dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
+#Graphical paramenters
 
-Xlabel=expression(bold(paste("Standing Crop"~"(g/m"^"2"~")")))
-Ylabel=expression(bold("Cu Content (mg/g)"))
+BW1<-5     #Smoothing for x axis dispersion
+BW2<-.009      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
+ALPHA<-0.6  #Transparency of dispersion curves
 
-
-#windows(width = 15, height = 25)
-#dev.off()     
 #dev.new()
 
-par(mfrow = c(2, 1)) 
+#Matrix layout for plots
 
-#par(mfrow = c(1, 3))
+layout(matrix(c(1,3,3,1,3,3,0,2,2),ncol=3), c(3.5,1), c(1,3))
 
-########### FIG 1
+layout.show(n=3)
+#Plot1
 
-par(fig = c(0.0, 0.9, 0.665, 1), mar=c(5.5,5.5,1,3)+.1)
+par(mar=c(0.5, 4.5, 0.5, 0.5))
 
-BW<-10
-ALPHA<-0.6
-aty <- seq(0.0, max(density(dfEPIP[,7], na.rm = TRUE, bw = BW)$y), length.out=5)
-
-
-plot(density(dfEPIP[,7], na.rm = TRUE, bw = BW), 
+plot(density(dfEPIP[,n], na.rm = TRUE, bw = BW1), 
      xlim = range(alldata[,n],na.rm=TRUE), 
      col=NA,
      lwd=3,
@@ -50,28 +56,96 @@ plot(density(dfEPIP[,7], na.rm = TRUE, bw = BW),
      yaxt = "n",
      ylab = NA,
      main=NA,
-     ylim=c(0.001,max(density(dfEPIP[,7], na.rm = TRUE, bw = BW)$y)),
+     ylim=c(0.001,max(density(dfEPIP[,n], na.rm = TRUE, bw = BW1)$y)),
      
 )     
 
-axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=0.70)
 
-polygon(density(dfEPIP[,7], na.rm = TRUE, bw = BW), 
-     xlim = range(alldata[,n],na.rm=TRUE), 
-     col=adjustcolor("gold",alpha.f=ALPHA),
-#     border="gold",
-     lwd=3)  
-polygon(density(dfEPIL[,7], na.rm = TRUE, bw = BW), col=adjustcolor(col=colors()[89],alpha.f=ALPHA),
-#        border=colors()[89],
-      lwd=3)          
-polygon(density(dfFILA[,7], na.rm = TRUE, bw = BW), col = adjustcolor("chartreuse3",alpha.f=ALPHA),
-#        border="chartreuse3",
-      lwd=3) 
+aty <- seq(0.0, max(c(density(dfEPIP[,n], na.rm = TRUE, bw = BW1)$y,
+                      density(dfEPIL[,n], na.rm = TRUE, bw = BW1)$y,
+                      density(dfFILA[,n], na.rm = TRUE, bw = BW1)$y)), length.out=5)
+axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1)
+
+polygon(density(dfEPIP[,n], na.rm = TRUE, bw = BW1), 
+        xlim = range(alldata[,n],na.rm=TRUE), 
+        col=adjustcolor("gold",alpha.f=ALPHA),
+        #     border="gold",
+        lwd=2)  
+polygon(density(dfEPIL[,n], na.rm = TRUE, bw = BW1), col=adjustcolor(col=colors()[89],alpha.f=ALPHA),
+        #        border=colors()[89],
+        lwd=2)          
+polygon(density(dfFILA[,n], na.rm = TRUE, bw = BW1), col = adjustcolor("chartreuse3",alpha.f=ALPHA),
+        #        border="chartreuse3",
+        lwd=2) 
+
 box(lwd=2)
 
-########## FIG 2
 
-par(fig = c(0.0, 0.9, 0, 0.85), new=T)
+# Plot 2 
+
+
+dnEPIP<-density(dfEPIP[,n2], na.rm = TRUE, bw = BW2)
+x1 <- dnEPIP$y
+y1 <- dnEPIP$x
+
+dnEPIL<-density(dfEPIL[,n2], na.rm = TRUE, bw = BW2)
+x2 <- dnEPIL$y
+y2 <- dnEPIL$x
+
+
+dnFILA<-density(dfFILA[,n2], na.rm = TRUE, bw = BW2)
+x3 <- dnFILA$y
+y3 <- dnFILA$x
+
+
+par(mar=c(4.5, 0.5, 0.5, 0.5))
+
+plot(density(dfEPIP[,n2], na.rm = TRUE, bw = BW1)$y, 
+     xlim = c(0.000,max(c(x1,x2,x3))), 
+     col=NA,
+     lwd="",
+     xaxt = "n",
+     xlab = NA,
+     yaxt = "n",
+     ylab = NA,
+     main=NA,
+     ylim=c(min(alldata[,n2], na.rm = TRUE),max(alldata[,n2], na.rm = TRUE)),
+)     
+
+
+
+polygon(dnEPIP$y,
+        dnEPIP$x, 
+        #        xlim = range(x1), 
+        col=adjustcolor("gold",alpha.f=ALPHA),
+        #        border="gold",
+        lwd=2)  
+
+
+polygon(dnEPIL$y,
+        dnEPIL$x, 
+        #        xlim = range(x2), 
+        col=adjustcolor(colors()[89],alpha.f=ALPHA),
+        #     border="gold",
+        lwd=2)  
+
+
+polygon(dnFILA$y,
+        dnFILA$x, 
+        #       xlim = range(x3), 
+        col=adjustcolor("chartreuse3",alpha.f=ALPHA),
+        #     border="gold",
+        lwd=2)  
+
+box(lwd=2)
+
+aty1 <- seq(0.0, max(c(x1,x2,x3)), length.out=5)
+
+axis(side = 1, at = aty1, labels=format(aty1, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1)
+
+#Plot 3
+
+par(mar=c(4.5, 4.5, 0.5, 0.5))
 
 plot(alldata[,n], alldata[,n2], 
      ylim = range(alldata[,n2],na.rm=TRUE),
@@ -85,9 +159,7 @@ plot(alldata[,n], alldata[,n2],
      
 )
 
-
 aty <- seq(0, max(alldata[,n2], na.rm=TRUE), length.out=5)
-
 axis(side = 1, at = seq(0, 200, length.out=5), las=1, font.axis=2, cex.axis=1)
 axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1)
 
@@ -102,7 +174,4 @@ points(dfEPIP[,7], dfEPIP[,n2],pch=23, cex=1.5,col="black", bg="gold",lwd=3)
 points(dfFILA[,7], dfFILA[,n2],pch=23, cex=1.5,col="black", bg="chartreuse3",lwd=3)
 
 box(lwd=2)
-#title(ylab=Ylabel, line=2.5, cex.lab=1.2, family="Calibri Light")
-
-
 

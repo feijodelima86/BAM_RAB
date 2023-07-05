@@ -24,7 +24,7 @@ COMPARTMENTS_AVG <-aggregate(x = COMPARTMENTS[,colnames(COMPARTMENTS) != c("SAMP
 
 write.csv(COMPARTMENTS_AVG, "2_incremental/COMPARTMENTS_AVG_2.csv")
 
-COMPARTMENTS <- read.csv("2_incremental/COMPARTMENTS_AVG_2.csv")
+COMPARTMENTS <- read.csv("2_incremental/COMPARTMENTS_AVG_4.csv")
 
 colnames(COMPARTMENTS)[c(2:4)]<-c("SAMPLING_DATE","SITE","SAMPLE_DESCRIPTOR")
 
@@ -82,7 +82,7 @@ plotGLM_As <- ggplot(mix.int_As, aes(x=TD.As, y=As, group = SAMPLE_DESCRIPTOR)) 
 
 plotGLM_As
 
-plotGLM_Ca <- ggplot(mix.int_Ca, aes(TD.Ca, Car, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
+plotGLM_Ca <- ggplot(mix.int_Ca, aes(TD.Ca, Car, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
   geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
   scale_shape_manual(values=c(21))+
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
@@ -99,14 +99,14 @@ plotGLM_Ca <- ggplot(mix.int_Ca, aes(TD.Ca, Car, col = as.factor(SAMPLE_DESCRIPT
 
 plotGLM_Ca
 
-plotGLM_Cd <- ggplot(mix.int_Cd, aes(TD.Cd, Cd, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
+plotGLM_Cd <- ggplot(mix.int_Cd, aes(TD.Cd, Cd, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
   geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
   scale_shape_manual(values=c(21))+
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title=NULL,
        x= "Cd  (TD, \u00b5g/l)",    
-       y= "Cd Content (\u00b5g/g)")+
+       y= "Cd Content (mg/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
   geom_smooth(aes(x=TD.Cd, y=Cd, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
@@ -118,7 +118,7 @@ plotGLM_Cd
 
 plot(allEffects(mix.int_Cd))
 
-plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
+plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
   geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
   scale_shape_manual(values=c(21))+
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
@@ -135,49 +135,234 @@ plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTO
 
 plotGLM_Cu
 
-plotGLM_Fe <- ggplot(mix.int_Fe, aes(TD.Fe, Fer.1, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
-  geom_smooth(method = "lm", linetype = "dashed")
+plotGLM_Fe <- ggplot(mix.int_Fe, aes(TD.Fe, Fer.1, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
+  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
+  scale_shape_manual(values=c(21))+
+  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
+  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
+  labs(title=NULL,
+       x= "Fe  (TD, \u00b5g/l)",    
+       y= "Fe Content (\u00b5g/g)")+
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))+
+  geom_smooth(aes(x=TD.Fe, y=Fer.1, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
+              method="glm", 
+              formula = y ~ x, 
+              method.args=list(family="gaussian")) 
 
 plotGLM_Fe
 
-plotGLM_Mo <- ggplot(mix.int_Mo, aes(TD.Mo, Mo, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
-  geom_smooth(method = "lm", linetype = "dashed")
+plotGLM_Mo <- ggplot(mix.int_Mo, aes(TD.Mo, Mo, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
+  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
+  scale_shape_manual(values=c(21))+
+  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
+  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
+  scale_x_continuous(trans='log10')+ 
+  labs(title=NULL,
+       x= "Mo  (TD, Log10 \u00b5g/l)",    
+       y= "Mo Content (\u00b5g/g)")+
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))+
+  geom_smooth(aes(x=TD.Mo, y=Mo, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
+              method="glm", 
+              formula = y ~ x, 
+              method.args=list(family="gaussian")) 
 
 plotGLM_Mo
 
-plotGLM_P <- ggplot(mix.int_P, aes(TD.P, P, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
-  geom_smooth(method = "lm", linetype = "dashed")
+plotGLM_P <- ggplot(mix.int_P, aes(TD.P, P, col = as.factor(SAMPLE_DESCRIPTOR)))+  
+  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
+  scale_shape_manual(values=c(21))+
+  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
+  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
+  scale_x_continuous(trans='log10')+ 
+  labs(title=NULL,
+       x= "P  (TD,Log10 \u00b5g/l)",    
+       y= "P Content (\u00b5g/g)")+
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))+
+  geom_smooth(aes(x=TD.P, y=P, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
+              method="glm", 
+              formula = y ~ x, 
+              method.args=list(family="gaussian")) 
 
 plotGLM_P
 
-plotGLM_Pb <- ggplot(mix.int_Pb, aes(TD.Pb, Pb, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
-  geom_smooth(method = "lm", linetype = "dashed")
+plotGLM_Pb <- ggplot(mix.int_Pb, aes(TD.Pb, Pb, col = as.factor(SAMPLE_DESCRIPTOR)))+  
+  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
+  scale_shape_manual(values=c(21))+
+  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
+  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
+#  scale_x_continuous(trans='log10')+ 
+  labs(title=NULL,
+       x= "Pb  (TD, \u00b5g/l)",    
+       y= "Pb Content (\u00b5g/g)")+
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))+
+  geom_smooth(aes(x=TD.Pb, y=Pb, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
+              method="glm", 
+              formula = y ~ x, 
+              method.args=list(family="gaussian")) 
 
 plotGLM_Pb
 
-plotGLM_Se <- ggplot(mix.int_Se, aes(TD.Se, Se, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
-  geom_smooth(method = "lm", linetype = "dashed")
+plotGLM_Se <- ggplot(mix.int_Se, aes(TD.Se, Se, col = as.factor(SAMPLE_DESCRIPTOR)))+  
+  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
+  scale_shape_manual(values=c(21))+
+  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
+  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
+  #  scale_x_continuous(trans='log10')+ 
+  labs(title=NULL,
+       x= "Se  (TD, \u00b5g/l)",    
+       y= "Se Content (\u00b5g/g)")+
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))+
+  geom_smooth(aes(x=TD.Se, y=Se, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
+              method="glm", 
+              formula = y ~ x, 
+              method.args=list(family="gaussian")) 
 
 plotGLM_Se
 
-plotGLM_Zn <- ggplot(mix.int_Zn, aes(TD.Zn, Znr, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
-  geom_smooth(method = "lm", linetype = "dashed")
+plotGLM_Zn <- ggplot(mix.int_Zn, aes(TD.Zn, Znr, col = as.factor(SAMPLE_DESCRIPTOR)))+  
+  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
+  scale_shape_manual(values=c(21))+
+  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
+  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
+  #  scale_x_continuous(trans='log10')+ 
+  labs(title=NULL,
+       x= "Zn  (TD, \u00b5g/l)",    
+       y= "Zn Content (\u00b5g/g)")+
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))+
+  geom_smooth(aes(x=TD.Zn, y=Znr, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
+              method="glm", 
+              formula = y ~ x, 
+              method.args=list(family="gaussian")) 
+
 
 plotGLM_Zn
 
-###Size Fractions Across Compartments###
+####Size Fractions Across Compartments####
 
 ###Candidate Variables: As=EPIL Cd: All Cu:All Mo: All P: Epil Pb:All Se: EPIL
+
+#### As  ####
+
+EPIL.SS.As<-lm(As ~ SS.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.SS.As)
+
+EPIP.SS.As<-lm(As ~ SS.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.SS.As)
+
+FILA.SS.As<-lm(As ~ SS.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.SS.As)
+
+plot(COMPARTMENTS$SS.As, COMPARTMENTS$As, 
+     xlim=c(0,max(COMPARTMENTS$SS.As, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$As, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$SS.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$As, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$SS.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$As, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$SS.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$As, pch=21, bg="darkgreen", col="black")
+
+abline(FILA.SS.As, col="chartreuse",lwd=3)
+abline(EPIP.SS.As, col="gold",lwd=3)
+abline(EPIL.SS.As, col="darkgreen",lwd=3)
+
+## As Col
+
+EPIL.CL.As<-lm(As ~ CL.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.CL.As)
+
+EPIP.CL.As<-lm(As ~ CL.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.CL.As)
+
+FILA.CL.As<-lm(As ~ CL.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.CL.As)
+
+
+plot(COMPARTMENTS$CL.As, COMPARTMENTS$As, 
+     xlim=c(0,max(COMPARTMENTS$CL.As, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$As, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$CL.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$As, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$CL.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$As, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$CL.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$As, pch=21, bg="darkgreen", col="black")
+
+abline(FILA.CL.As, col="chartreuse",lwd=3)
+abline(EPIP.CL.As, col="gold",lwd=3)
+abline(EPIL.SS.As, col="darkgreen",lwd=3)
+
+
+### As TD
+
+EPIL.TD.As<-lm(As ~ TD.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.TD.As)
+
+EPIP.TD.As<-lm(As ~ TD.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.TD.As)
+
+FILA.TD.As<-lm(As ~ TD.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.TD.As)
+
+
+plot(COMPARTMENTS$TD.As, COMPARTMENTS$As, 
+     xlim=c(0,max(COMPARTMENTS$TD.As, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$As, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+abline(FILA.TD.As, col="chartreuse",lwd=3)
+abline(EPIP.TD.As, col="gold",lwd=3)
+abline(EPIL.TD.As, col="darkgreen",lwd=3)
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$TD.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$As, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$TD.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$As, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$TD.As, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$As, pch=21, bg="darkgreen", col="black")
+
+
 
 #### Cd  ####
 
 ### Cd SS 
 
 EPIL.SS.Cd<-lm(Cd ~ SS.Cd, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.SS.Cd)
 
 EPIP.SS.Cd<-lm(Cd ~ SS.Cd, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.SS.Cd)
 
 FILA.SS.Cd<-lm(Cd ~ SS.Cd, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.SS.Cd)
 
 plot(COMPARTMENTS$SS.Cd, COMPARTMENTS$Cd, 
           xlim=c(0,max(COMPARTMENTS$SS.Cd, na.rm = T)*1.1), 
@@ -204,10 +389,13 @@ abline(EPIL.SS.Cd, col="darkgreen",lwd=3)
 ## Cd Col
 
 EPIL.CL.Cd<-lm(Cd ~ CL.Cd, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.CL.Cd)
 
 EPIP.CL.Cd<-lm(Cd ~ CL.Cd, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIL.CL.Cd)
 
 FILA.CL.Cd<-lm(Cd ~ CL.Cd, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.CL.Cd)
 
 plot(COMPARTMENTS$CL.Cd, COMPARTMENTS$Cd, 
      xlim=c(0,max(COMPARTMENTS$CL.Cd, na.rm = T)*1.1), 
@@ -273,10 +461,14 @@ points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$TD.Cd, COM
 ### Cu SS 
 
 EPIL.SS.Cu<-lm(Cu ~ SS.Cu, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.SS.Cu)
 
 EPIP.SS.Cu<-lm(Cu ~ SS.Cu, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.SS.Cu)
 
 FILA.SS.Cu<-lm(Cu ~ SS.Cu, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.SS.Cu)
+
 
 plot(COMPARTMENTS$SS.Cu, COMPARTMENTS$Cu, 
      xlim=c(0,max(COMPARTMENTS$SS.Cu, na.rm = T)*1.1), 
@@ -370,10 +562,13 @@ points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$TD.Cu, COM
 ### Mo SS 
 
 EPIL.SS.Mo<-lm(Mo ~ SS.Mo, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.SS.Mo)
 
 EPIP.SS.Mo<-lm(Mo ~ SS.Mo, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.SS.Mo)
 
 FILA.SS.Mo<-lm(Mo ~ SS.Mo, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.SS.Mo)
 
 plot(COMPARTMENTS$SS.Mo, COMPARTMENTS$Mo, 
      xlim=c(0,max(COMPARTMENTS$SS.Mo, na.rm = T)*1.1), 
@@ -472,10 +667,13 @@ points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$TD.Mo, COM
 ### Pb SS 
 
 EPIL.SS.Pb<-lm(Pb ~ SS.Pb, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.SS.Pb)
 
 EPIP.SS.Pb<-lm(Pb ~ SS.Pb, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.SS.Pb)
 
 FILA.SS.Pb<-lm(Pb ~ SS.Pb, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.SS.Pb)
 
 plot(COMPARTMENTS$SS.Pb, COMPARTMENTS$Pb, 
      xlim=c(0,max(COMPARTMENTS$SS.Pb, na.rm = T)*1.1), 
@@ -567,15 +765,122 @@ points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$TD.Pb, COM
 points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$TD.Pb, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$Pb, pch=21, bg="gold", col="black")
 points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$TD.Pb, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$Pb, pch=21, bg="darkgreen", col="black")
 
+
+#### P ####
+
+### P SS 
+
+EPIL.SS.P<-lm(P ~ SS.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+
+EPIP.SS.P<-lm(P ~ SS.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+
+FILA.SS.P<-lm(P ~ SS.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+
+plot(COMPARTMENTS$SS.P, COMPARTMENTS$P, 
+     xlim=c(0,max(COMPARTMENTS$SS.P, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$P, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$SS.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$P, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$SS.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$P, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$SS.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$P, pch=21, bg="darkgreen", col="black")
+
+abline(FILA.SS.P, col="chartreuse",lwd=3)
+abline(EPIP.SS.P, col="gold",lwd=3)
+abline(EPIL.SS.P, col="darkgreen",lwd=3)
+
+## P Col
+
+EPIL.CL.P<-lm(P ~ CL.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.CL.P)
+
+EPIP.CL.P<-lm(P ~ CL.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.CL.P)
+
+FILA.CL.P<-lm(P ~ CL.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.CL.P)
+
+plot(COMPARTMENTS$CL.P, COMPARTMENTS$P, 
+     xlim=c(0,max(COMPARTMENTS$CL.P, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$P, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$CL.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$P, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$CL.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$P, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$CL.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$P, pch=21, bg="darkgreen", col="black")
+
+abline(FILA.CL.P, col="chartreuse",lwd=3)
+abline(EPIP.CL.P, col="gold",lwd=3)
+abline(EPIL.SS.P, col="darkgreen",lwd=3)
+
+
+### P TD
+
+EPIL.TD.P<-lm(P ~ TD.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.TD.P)
+
+EPIP.TD.P<-lm(P ~ TD.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.TD.P)
+
+FILA.TD.P<-lm(P ~ TD.P, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.TD.P)
+
+
+plot(COMPARTMENTS$TD.P, COMPARTMENTS$P, 
+     xlim=c(0,max(COMPARTMENTS$TD.P, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$P, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+abline(FILA.TD.P, col="chartreuse",lwd=3)
+abline(EPIP.TD.P, col="gold",lwd=3)
+abline(EPIL.TD.P, col="darkgreen",lwd=3)
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$TD.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$P, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$TD.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$P, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$TD.P, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$P, pch=21, bg="darkgreen", col="black")
+
+
+
+
 #### Fe  ####
 
 ### Fe SS 
 
 EPIL.SS.Fe<-lm(Fer.1 ~ SS.Fe, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.SS.Fe)
 
 EPIP.SS.Fe<-lm(Fer.1 ~ SS.Fe, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.SS.Fe)
 
 FILA.SS.Fe<-lm(Fer.1 ~ SS.Fe, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.SS.Fe)
 
 plot(COMPARTMENTS$SS.Fe, COMPARTMENTS$Fer.1, 
      xlim=c(0,max(COMPARTMENTS$SS.Fe, na.rm = T)*1.1), 
@@ -630,7 +935,7 @@ points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$CL.Fe, COM
 
 abline(FILA.CL.Fe, col="chartreuse",lwd=3)
 abline(EPIP.CL.Fe, col="gold",lwd=3)
-abline(EPIL.SS.Fe, col="darkgreen",lwd=3)
+abline(EPIL.CL.Fe, col="darkgreen",lwd=3)
 
 
 ### Fe TD
@@ -667,5 +972,106 @@ points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$TD.Fe, COM
 points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$TD.Fe, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$Fer.1, pch=21, bg="gold", col="black")
 points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$TD.Fe, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$Fer.1, pch=21, bg="darkgreen", col="black")
 
+#### Se ####
 
+### Se SS 
+
+EPIL.SS.Se<-lm(Se ~ SS.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.SS.Se)
+
+EPIP.SS.Se<-lm(Se ~ SS.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.SS.Se)
+
+FILA.SS.Se<-lm(Se ~ SS.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.SS.Se)
+
+plot(COMPARTMENTS$SS.Se, COMPARTMENTS$Se, 
+     xlim=c(0,max(COMPARTMENTS$SS.Se, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$Se, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$SS.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$Se, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$SS.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$Se, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$SS.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$Se, pch=21, bg="darkgreen", col="black")
+
+abline(FILA.SS.Se, col="chartreuse",lwd=3)
+abline(EPIP.SS.Se, col="gold",lwd=3)
+abline(EPIL.SS.Se, col="darkgreen",lwd=3)
+
+## Se Col
+
+EPIL.CL.Se<-lm(Se ~ CL.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.CL.Se)
+
+EPIP.CL.Se<-lm(Se ~ CL.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.CL.Se)
+
+FILA.CL.Se<-lm(Se ~ CL.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.CL.Se)
+
+plot(COMPARTMENTS$CL.Se, COMPARTMENTS$Se, 
+     xlim=c(0,max(COMPARTMENTS$CL.Se, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$Se, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$CL.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$Se, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$CL.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$Se, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$CL.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$Se, pch=21, bg="darkgreen", col="black")
+
+abline(FILA.CL.Se, col="chartreuse",lwd=3)
+abline(EPIP.CL.Se, col="gold",lwd=3)
+abline(EPIL.SS.Se, col="darkgreen",lwd=3)
+
+
+### Se TD
+
+EPIL.TD.Se<-lm(Se ~ TD.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+summary(EPIL.TD.Se)
+
+EPIP.TD.Se<-lm(Se ~ TD.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])
+summary(EPIP.TD.Se)
+
+FILA.TD.Se<-lm(Se ~ TD.Se, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
+summary(FILA.TD.Se)
+
+
+plot(COMPARTMENTS$TD.Se, COMPARTMENTS$Se, 
+     xlim=c(0,max(COMPARTMENTS$TD.Se, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$Se, na.rm = T)), 
+     col="white",
+     xlab="x", 
+     ylab="Y", 
+     lwd=1.5,        
+     las=1,
+     font.lab=2,
+     font.axis = 2,
+     cex.lab=1.5,
+     cex.axis=1)
+
+
+abline(FILA.TD.Se, col="chartreuse",lwd=3)
+abline(EPIP.TD.Se, col="gold",lwd=3)
+abline(EPIL.TD.Se, col="darkgreen",lwd=3)
+
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$TD.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),]$Se, pch=21, bg="chartreuse", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$TD.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),]$Se, pch=21, bg="gold", col="black")
+points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$TD.Se, COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$Se, pch=21, bg="darkgreen", col="black")
 
