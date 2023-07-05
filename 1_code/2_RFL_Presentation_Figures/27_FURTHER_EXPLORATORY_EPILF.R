@@ -11,26 +11,24 @@ library("splines")
 library("effects")
 library("mgcv")
 
-alldata <- read_csv("2_incremental/wateralgae13_WORKING_MANUAL.csv")
+alldata <- read_csv("2_incremental/wateralgae13_WORKING_MANUAL_W.csv")
 
 alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE, format = "%m/%d/%Y")
 
-COMPARTMENTS <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"| alldata$SAMPLE_DESCRIPTOR == "EPIP" | alldata$SAMPLE_DESCRIPTOR == "FILA"),]
+COMPARTMENTS <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"| alldata$SAMPLE_DESCRIPTOR == "EPIL_F"| alldata$SAMPLE_DESCRIPTOR == "EPIP" | alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 COMPARTMENTS_AVG <-aggregate(x = COMPARTMENTS[,colnames(COMPARTMENTS) != c("SAMPLING_DATE","SITE","SAMPLE_DESCRIPTOR")],          
                              by = list(COMPARTMENTS$SAMPLING_DATE,COMPARTMENTS$SITE,COMPARTMENTS$SAMPLE_DESCRIPTOR),
                              FUN = mean,
                              na.rm = T)
 
-write.csv(COMPARTMENTS_AVG, "2_incremental/COMPARTMENTS_AVG_2.csv")
+write.csv(COMPARTMENTS_AVG, "2_incremental/COMPARTMENTS_AVG_3.csv")
 
-COMPARTMENTS <- read.csv("2_incremental/COMPARTMENTS_AVG_2.csv")
+COMPARTMENTS <- read.csv("2_incremental/COMPARTMENTS_AVG_3.csv")
 
 colnames(COMPARTMENTS)[c(2:4)]<-c("SAMPLING_DATE","SITE","SAMPLE_DESCRIPTOR")
 
 COMPARTMENTS<-COMPARTMENTS[,c(2,3,4,8,10:63)]
-
-#COMPARTMENTS <- read_csv("2_incremental/wateralgae13_WORKING_MANUAL.csv")
 
 ###GLMS####
 
@@ -68,13 +66,13 @@ names(COMPARTMENTS)
 plotGLM_As <- ggplot(mix.int_As, aes(x=TD.As, y=As, group = SAMPLE_DESCRIPTOR)) +
   geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
   scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
+  scale_color_manual(values=c("black","black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title="Title",
        x= "As  (TD, \u00b5g/l)",    
        y= "As Content (\u00b5g/g)")+
   theme(axis.text=element_text(size=12),
-       axis.title=element_text(size=14,face="bold"))+
+        axis.title=element_text(size=14,face="bold"))+
   geom_smooth(aes(x=TD.As, y=As, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
               method="glm", 
               formula = y ~ x, 
@@ -133,6 +131,15 @@ plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTO
               formula = y ~ x, 
               method.args=list(family="gaussian")) 
 
+plotGLM_Cd <- ggplot(mix.int_Cd, aes(TD.Cd, Cd, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
+  geom_smooth(method = "lm", linetype = "dashed")
+
+plotGLM_Cd
+
+
+plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
+  geom_smooth(method = "lm", linetype = "dashed")
+
 plotGLM_Cu
 
 plotGLM_Fe <- ggplot(mix.int_Fe, aes(TD.Fe, Fer.1, col = as.factor(SAMPLE_DESCRIPTOR)))+  geom_point() +
@@ -180,11 +187,11 @@ EPIP.SS.Cd<-lm(Cd ~ SS.Cd, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTO
 FILA.SS.Cd<-lm(Cd ~ SS.Cd, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "FILA"),])
 
 plot(COMPARTMENTS$SS.Cd, COMPARTMENTS$Cd, 
-          xlim=c(0,max(COMPARTMENTS$SS.Cd, na.rm = T)*1.1), 
-          ylim=c(0,max(COMPARTMENTS$Cd, na.rm = T)), 
+     xlim=c(0,max(COMPARTMENTS$SS.Cd, na.rm = T)*1.1), 
+     ylim=c(0,max(COMPARTMENTS$Cd, na.rm = T)), 
      col="white",
-          xlab="x", 
-          ylab="Y", 
+     xlab="x", 
+     ylab="Y", 
      lwd=1.5,        
      las=1,
      font.lab=2,
