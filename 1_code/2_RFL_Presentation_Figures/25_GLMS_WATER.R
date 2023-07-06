@@ -22,9 +22,9 @@ COMPARTMENTS_AVG <-aggregate(x = COMPARTMENTS[,colnames(COMPARTMENTS) != c("SAMP
                              FUN = mean,
                              na.rm = T)
 
-write.csv(COMPARTMENTS_AVG, "2_incremental/COMPARTMENTS_AVG_2.csv")
+write.csv(COMPARTMENTS_AVG, "2_incremental/COMPARTMENTS_AVG_4.csv")
 
-COMPARTMENTS <- read.csv("2_incremental/COMPARTMENTS_AVG_4.csv")
+COMPARTMENTS <- read.csv("2_incremental/COMPARTMENTS_AVG_5.csv")
 
 colnames(COMPARTMENTS)[c(2:4)]<-c("SAMPLING_DATE","SITE","SAMPLE_DESCRIPTOR")
 
@@ -520,7 +520,7 @@ points(COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),]$CL.Cu, COM
 
 abline(FILA.CL.Cu, col="chartreuse",lwd=3)
 abline(EPIP.CL.Cu, col="gold",lwd=3)
-abline(EPIL.SS.Cu, col="darkgreen",lwd=3)
+abline(EPIL.CL.Cu, col="darkgreen",lwd=3)
 
 
 ### Cu TD
