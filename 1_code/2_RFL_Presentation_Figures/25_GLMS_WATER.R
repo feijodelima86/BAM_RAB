@@ -125,7 +125,7 @@ plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTO
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title=NULL,
        x= "Cu  (TD, \u00b5g/l)",    
-       y= "Cu Content (\u00b5g/g)")+
+       y= "Cu Content (mg/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
   geom_smooth(aes(x=TD.Cu, y=Cu, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
