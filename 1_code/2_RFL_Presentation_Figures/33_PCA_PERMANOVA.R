@@ -1,6 +1,24 @@
 library("readr")
+library("dplyr")
+library("ggplot2"); theme_set(theme_bw() +
+                                theme(axis.line = element_line(color='black'),
+                                      plot.background = element_blank(),
+                                      panel.grid.minor = element_blank(),
+                                      panel.grid.major = element_blank()))
+library("scales")
+library("performance")
+library("splines")
+library("effects")
+library("mgcv")
+
+### To Do: 
+
+### 1: Perform tests on PCA to see if different compartments are truly different.
+
 library("corrplot")
 library("vegan")
+library("RVAideMemoire")
+
 
 alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP.csv"))
 
@@ -13,18 +31,6 @@ COMPARTMENTS <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"| alldata$SAMPL
 nrow(COMPARTMENTS)
 names(COMPARTMENTS)
 
-####Least VIF####
-
-LABELS<-as.data.frame(na.omit(COMPARTMENTS[,c(3,4,6,17,18,20,31,35,36,40,41,44)]))
-LABELS<-LABELS[order(LABELS$SAMPLE_DESCRIPTOR, decreasing = F), ]
-PCA.DF<-as.data.frame(LABELS[,c(4:ncol(LABELS))])
-names(LABELS)
-names(PCA.DF)<- c("Be","Ca","Co","Mo","Pb","S","Se","Si","Sn")
-
-cor(PCA.DF)
-corrplot(cor(PCA.DF), method = "circle", lwd=2) 
-
-
 ####Big 5+Fe+Se+Mo####
 
 LABELS<-as.data.frame(na.omit(COMPARTMENTS[,c(3,4,6,13,19,22,25,31,35,40,49)]))
@@ -32,7 +38,7 @@ LABELS<-LABELS[order(LABELS$SAMPLE_DESCRIPTOR, decreasing = F), ]
 PCA.DF<-as.data.frame(LABELS[,c(4:ncol(LABELS))])
 names(PCA.DF)<- c("As","Cd","Cu","Fe","Mo","Pb","Se","Zn")
 
-dev.new()
+#dev.new()
 cor(PCA.DF)
 corrplot(cor(PCA.DF), method = "circle", lwd=2) 
 
@@ -42,9 +48,20 @@ corrplot(cor(PCA.DF), method = "circle", lwd=2)
 PCA.DF<-log(PCA.DF)
 my.data <- PCA.DF
 my.data <- as.matrix(scale(my.data, center = TRUE, scale = TRUE))
+groups <- factor(LABELS$SAMPLE_DESCRIPTOR)
+
+
 my.prc <- prcomp(na.omit(my.data))
 
 plot(my.prc)
+
+dis <- vegdist(my.data, method="euclidean")
+
+pairwise.permanova <- pairwise.perm.manova(dis, groups, nperm = 999, p.method = "fdr", F = FALSE, R2 = FALSE)
+
+mod <- betadisper(dis, groups, sqrt.dist=T, bias.adjust=T, type = "centroid")
+
+pairwise.variance<-permutest(mod, pairwise = TRUE, permutations = 999)
 
 pca_scores<-scores(my.prc)
 
@@ -72,17 +89,17 @@ plot	(my.prc$x[,1], my.prc$x[,2],
       col="white",
       xlab="PC 1",
       ylab="PC 2"
-      )
+)
 #	col="black")
 
 tab <- matrix(c(my.prc$x[,1], my.prc$x[,2]), ncol=2)
 
 legend(x = "topleft", legend = levels(factor(LABELS$SAMPLE_DESCRIPTOR)), 
-      pch=c(23,24,25), 
-      cex = 1, 
-      box.lwd=3,
-      col = "black", 
-      pt.bg=c(colors()[89], "gold", "chartreuse"), pt.lwd=3)
+       pch=c(23,24,25), 
+       cex = 1, 
+       box.lwd=3,
+       col = "black", 
+       pt.bg=c(colors()[89], "gold", "chartreuse"), pt.lwd=3)
 
 
 panel.first= {
@@ -113,7 +130,7 @@ arrows(0, 0,
 text(	x=correlations[,1]*1.075,
       y=correlations[,2]*1.05,
       labels = names(PCA.DF), 
-      cex=1.5,
+      cex=1.0,
       font=2)
 
 rownames(my.prc$rotation)
@@ -133,4 +150,11 @@ mtext("y2",side=4,line=2, col="Blue")
 
 abline(h=c(0,0))
 abline(v=c(0,0))
+
+my.prc
+
+
+
+
+
 

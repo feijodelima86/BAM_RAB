@@ -31,7 +31,7 @@ names(alldata)
 
 # 7 = biomass, 58 = Cd 73 = Pb, 70=Mo , Cu=61, As=52
 
-n1<-7
+n1<-73
 
 mult=1
 
@@ -63,12 +63,12 @@ ALL.SUM<-ALL.SUM %>% reduce(full_join)
 
 #Eyeballed turnover rates
 
-#ALL.SUM$MEAN.EPIP<-   ALL.SUM$MEAN.EPIP  *0.35
-#ALL.SUM$STDER.EPIP<-  ALL.SUM$STDER.EPIP *0.35
-#ALL.SUM$MEAN.EPIL<-   ALL.SUM$MEAN.EPIL  *0.35
-#ALL.SUM$STDER.EPIL<-  ALL.SUM$STDER.EPIL *0.35
-#ALL.SUM$MEAN.FILA<-   ALL.SUM$MEAN.FILA  *0.09
-#ALL.SUM$STDER.FILA<-  ALL.SUM$STDER.FILA *0.09
+ALL.SUM$MEAN.EPIP<-   ALL.SUM$MEAN.EPIP  *0.35
+ALL.SUM$STDER.EPIP<-  ALL.SUM$STDER.EPIP *0.35
+ALL.SUM$MEAN.EPIL<-   ALL.SUM$MEAN.EPIL  *0.35
+ALL.SUM$STDER.EPIL<-  ALL.SUM$STDER.EPIL *0.35
+ALL.SUM$MEAN.FILA<-   ALL.SUM$MEAN.FILA  *0.09
+ALL.SUM$STDER.FILA<-  ALL.SUM$STDER.FILA *0.09
 
 ALL.SUM[is.na(ALL.SUM)] <- 0
 
@@ -125,10 +125,10 @@ ardat3 <- lapply(1:L,function(x){
 #create empty plot
 
 #dev.new(width=10, height=7, noRStudioGD = TRUE)
-#par(mar=c(4,6,4,4))
+par(mar=c(4,6,4,4))
 plot(ALL.SUM[,1], ALL.SUM[,5],
      type='n',
-     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 120, f = ceiling)),
+     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 0.1, f = ceiling)),
      xlim= c(as.Date("2021-06-20"),as.Date("2021-10-30")),
      ylab=NA, 
      yaxt = "n",
@@ -141,12 +141,9 @@ plot(ALL.SUM[,1], ALL.SUM[,5],
 
 axis(side = 2, las=1, font.axis=2, cex.axis=2)
 
-
-plyr::round_any(range(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), 20, f = ceiling)
-
 at = seq(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]), 175, f = ceiling), length.out=5)
 
-axis.Date(1, at=seq(as.Date("2021-06-20"), as.Date("2021-10-30"), "1 week"), las=1, font.axis=2, cex.axis=2, format="%d-%b")
+axis.Date(1, at=seq(as.Date("2021-06-20"), as.Date("2021-10-30"), "2 weeks"), las=1, font.axis=2, cex.axis=2, format="%d-%b")
 
 #add polygons
 
