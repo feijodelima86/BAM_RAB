@@ -6,11 +6,9 @@ library("ggplot2"); theme_set(theme_bw() +
                                       panel.grid.minor = element_blank(),
                                       panel.grid.major = element_blank()))
 library("scales")
-library("performance")
 library("splines")
 library("effects")
 library("mgcv")
-
 
 COMPARTMENTS <- read.csv("2_incremental/water5.csv")
 
@@ -19,16 +17,15 @@ colnames(COMPARTMENTS)[c(2:3)]<-c("SAMPLING_DATE","SITE")
 COMPARTMENTS$SITE <- factor(COMPARTMENTS$SITE, labels = c("WS","DL","GR","GC","BG","BN"))
 
 
-
 #Selected site 
 
-ssite<-"GC"
+ssite<-"WS"
 
 # Selected element
 
 names(COMPARTMENTS)
 
-# Cd = 12, 22, 32
+# P= 4 Cd = 12 Fe= 6 As = 9
 
 n1<-12
 
@@ -46,7 +43,7 @@ SS.SUM<-data.frame(aggregate(as.numeric(COMPARTMENTS[,n1]) ~ SAMPLING_DATE+SITE,
 
 ALL.wSUM<-list(TD.SUM,CL.SUM,SS.SUM)
 
-ALL.wSUM<-ALL.wSUM %>% reduce(full_join)
+ALL.wSUM<-ALL.wSUM %>% purrr::reduce(full_join)
 
 ALL.wSUM <- subset(ALL.wSUM, SITE == ssite)
 names(ALL.wSUM)<-c("DATE","SITE","TD.SUM","CL.SUM","SS.SUM")
