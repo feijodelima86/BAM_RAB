@@ -2,22 +2,20 @@ library(plyr)
 library(tidyverse)
 library(readr)
 
-
 alldata <- read.csv("2_incremental/20220420_STANDING_CROP.csv")
 
-alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE)
 
 names(alldata)
 
 # Selecting variables
 
 n<-7
-n2<-19 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
+n2<-13 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
 
 #Names of axes
 
 Xlabel=expression(bold(paste("Standing Crop"~"(g/m"^"2"~")")))
-Ylabel=expression(bold("Cd Burden (mg/g)"))
+Ylabel=expression(bold("As Burden (mg/g)"))
 
 #Subsetting by compartment
 
@@ -33,7 +31,7 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 #Graphical paramenters
 
 BW1<-5     #Smoothing for x axis dispersion
-BW2<-0.0004      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
+BW2<-0.009      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
 ALPHA<-0.6  #Transparency of dispersion curves
 
 dev.new()

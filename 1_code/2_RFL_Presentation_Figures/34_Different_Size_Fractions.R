@@ -12,15 +12,9 @@ library("splines")
 library("effects")
 library("mgcv")
 
-COMPARTMENTS <- read.csv("2_incremental/COMPARTMENTS_AVG_6.csv")
+COMPARTMENTS <- read_csv("2_incremental/COMPARTMENTS_AVG_6.csv")
 
 colnames(COMPARTMENTS)[c(2:4)]<-c("SAMPLING_DATE","SITE","SAMPLE_DESCRIPTOR")
-
-COMPARTMENTS<-COMPARTMENTS[,c(2,3,4,8,10:63)]
-
-names(COMPARTMENTS)
-
-#COMPARTMENTS <- read_csv("2_incremental/wateralgae13_WORKING_MANUAL.csv")
 
 ###GLMS####
 
@@ -42,7 +36,7 @@ plotGLM_As_TD <- ggplot(mix.int_As_TD, aes(x=TD.As, y=As, group = SAMPLE_DESCRIP
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title="Title",
-       x= "As  (TD, \u00b5g/l)",    
+       x= "As  (W, \u00b5g/l)",    
        y= "As Content (mg/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
@@ -58,7 +52,7 @@ plotGLM_As_CL <- ggplot(mix.int_As_CL, aes(x=CL.As, y=As, group = SAMPLE_DESCRIP
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title="Title",
-       x= "As  (TD, \u00b5g/l)",    
+       x= "As  (F, \u00b5g/l)",    
        y= "As Content (mg/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
@@ -123,7 +117,7 @@ plotGLM_Cd_CL <- ggplot(mix.int_Cd_CL, aes(x=CL.Cd, y=Cd, group = SAMPLE_DESCRIP
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title="Title",
-       x= "Cd  (TD, \u00b5g/l)",    
+       x= "Cd  (F, \u00b5g/l)",    
        y= "Cd Content (\u00b5g/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
@@ -139,7 +133,7 @@ plotGLM_Cd_SS <- ggplot(mix.int_Cd_SS, aes(x=SS.Cd, y=Cd, group = SAMPLE_DESCRIP
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title="Title",
-       x= "Cd  (TD, \u00b5g/l)",    
+       x= "Cd  (W, \u00b5g/l)",    
        y= "Cd Content (\u00b5g/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
@@ -189,7 +183,7 @@ plotGLM_Cu_CL <- ggplot(mix.int_Cu_CL, aes(x=CL.Cu, y=Cu, group = SAMPLE_DESCRIP
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title="Title",
-       x= "Cu  (TD, \u00b5g/l)",    
+       x= "Cu  (F, \u00b5g/l)",    
        y= "Cu Content (\u00b5g/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
@@ -205,7 +199,7 @@ plotGLM_Cu_SS <- ggplot(mix.int_Cu_SS, aes(x=SS.Cu, y=Cu, group = SAMPLE_DESCRIP
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
   scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
   labs(title="Title",
-       x= "Cu  (TD, \u00b5g/l)",    
+       x= "Cu  (W, \u00b5g/l)",    
        y= "Cu Content (\u00b5g/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
@@ -549,5 +543,13 @@ plotGLM_Zn_SS <- ggplot(mix.int_Zn_SS, aes(x=SS.Zn, y=Znr, group = SAMPLE_DESCRI
 figure.Zn <- ggarrange(plotGLM_Zn_TD, plotGLM_Zn_CL, plotGLM_Zn_SS,
                        labels = c("A", "B", "C"),
                        ncol = 3, nrow = 1)
+
+find(mix.int_, mode=list)
+
+all.mods<-list(mget(ls(pattern = "mix.int_")))
+
+
+summary(mix.int_As_CL)$coefficients
+
 
 

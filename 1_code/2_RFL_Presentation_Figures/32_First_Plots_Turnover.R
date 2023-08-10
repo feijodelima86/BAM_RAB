@@ -7,23 +7,21 @@ alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP_Rafa_Interp
 
 alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE, format = "%m/%d/%Y")
 
+TURNOVER <- read_csv("2_incremental/TURNOVER_REDUX.csv")
+
+TURNOVER$SAMPLING_DATE<-as.Date(TURNOVER$SAMPLING_DATE, format = "%m/%d/%Y")
+
+add.comp<-list(alldata,TURNOVER)
+
+alldata<-add.comp %>% reduce(full_join)
+
+write.csv(alldata, "2_incremental/TURNOVER_Full_Dataset.csv")
+
+
+#standard error functiton
+
 se <- function(x, ...) sqrt(var(x, ...)/length(x))
 
-#alldata[,c(11-87)]<-alldata[,c(13-87)]
-
-#alldata<-replace(alldata[c(13:88)], alldata[c(13:87)] < 0, 0)
-
-# Variable date to factor
-
-dfEPIL <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
-
-dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
-
-dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
-
-#Selected site 
-
-ssite<-"GC"
 
 # Selected element
 
@@ -31,7 +29,25 @@ names(alldata)
 
 # 7 = biomass, 58 = Cd 73 = Pb, 70=Mo , Cu=61, As=52
 
-n1<-73
+n1<-74
+
+# If turnover rates are desired
+
+#alldata[,n1]<-alldata[,n1]*alldata[,89]
+
+#Selected site 
+
+ssite<-"GC"
+
+dfEPIL <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIL"),]
+
+dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
+
+dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
+
+alldata
+
+# Multiplier for unit conversion. 
 
 mult=1
 
@@ -62,13 +78,6 @@ ALL.SUM<-list(EPIP.SUM,FILA.SUM,EPIL.SUM)
 ALL.SUM<-ALL.SUM %>% reduce(full_join)
 
 #Eyeballed turnover rates
-
-ALL.SUM$MEAN.EPIP<-   ALL.SUM$MEAN.EPIP  *0.35
-ALL.SUM$STDER.EPIP<-  ALL.SUM$STDER.EPIP *0.35
-ALL.SUM$MEAN.EPIL<-   ALL.SUM$MEAN.EPIL  *0.35
-ALL.SUM$STDER.EPIL<-  ALL.SUM$STDER.EPIL *0.35
-ALL.SUM$MEAN.FILA<-   ALL.SUM$MEAN.FILA  *0.09
-ALL.SUM$STDER.FILA<-  ALL.SUM$STDER.FILA *0.09
 
 ALL.SUM[is.na(ALL.SUM)] <- 0
 
@@ -124,11 +133,11 @@ ardat3 <- lapply(1:L,function(x){
 
 #create empty plot
 
-#dev.new(width=10, height=7, noRStudioGD = TRUE)
+dev.new(width=10, height=5, noRStudioGD = TRUE)
 par(mar=c(4,6,4,4))
 plot(ALL.SUM[,1], ALL.SUM[,5],
      type='n',
-     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 0.1, f = ceiling)),
+     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 0.7, f = ceiling)),
      xlim= c(as.Date("2021-06-20"),as.Date("2021-10-30")),
      ylab=NA, 
      yaxt = "n",
@@ -157,8 +166,7 @@ for (i in 1:L) arrows(unlist(ardat3[[i]]$x0),unlist(ardat3[[i]]$y0),unlist(ardat
 for (i in 1:L) arrows(unlist(ardat2[[i]]$x0),unlist(ardat2[[i]]$y0),unlist(ardat2[[i]]$x1),unlist(ardat2[[i]]$y1), length=0.075, angle=90, code=2, lwd=2,col="black")
 for (i in 1:L) arrows(unlist(ardat1[[i]]$x0),unlist(ardat1[[i]]$y0),unlist(ardat1[[i]]$x1),unlist(ardat1[[i]]$y1), length=0.075, angle=90, code=2, lwd=2,col="black")
 
-
 box(lwd=4)
-options("warn"=1)
+
 
 
