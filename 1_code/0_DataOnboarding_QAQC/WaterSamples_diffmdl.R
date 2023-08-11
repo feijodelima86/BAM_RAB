@@ -148,8 +148,11 @@ water_data <- data %>%
 
 summary(dblanks)
 
+<<<<<<< HEAD
 dblanks <- dblanks[-8,]
 
+=======
+>>>>>>> 8ca2e46a663fe8f2f9c305a380dfd0b13733c37b
 #calculate MDL off of digestion blanks MDL = students t-value (99% CI for n-1 DF)*standard deviation. t value is 3.14 for 7 replicates
 
 #DF is number of rows -1
@@ -229,8 +232,13 @@ summary(water_correct)
 
 ## Save cleaned data---- 
 
+<<<<<<< HEAD
 write.csv(water_correct, file.path("./2_incremental","230731_Water_Metals_long_diff.csv"))
 write.csv(water_QAQC, file.path("./2_incremental","230731_WaterQAQC_diff.csv"))
+=======
+write.csv(water_correct, file.path("./2_incremental","230731_Water_Metals_long.csv"))
+write.csv(water_QAQC, file.path("./2_incremental","230731_WaterQAQC.csv"))
+>>>>>>> 8ca2e46a663fe8f2f9c305a380dfd0b13733c37b
 
 
 
@@ -260,5 +268,9 @@ water_size <- water_calc %>%
 
 ##save finished data ----
 
+<<<<<<< HEAD
 write.csv(water_size, file.path("./2_incremental","230801_Water_Metals_Size_diff.csv"))
+=======
+write.csv(water_size, file.path("./2_incremental","230801_Water_Metals_Size.csv"))
+>>>>>>> 8ca2e46a663fe8f2f9c305a380dfd0b13733c37b
 
