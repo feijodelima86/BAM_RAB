@@ -29,8 +29,7 @@ water3 <- read.csv(file.path("./0_data/icp_ms_internal","230616_BAMRAB3.1.csv"),
 
 #remove rows that we do not want to use (rerun needed or a split reprocess)
 
-
-water1 <- water1[c(1:127),] 
+water1 <- water1[c(1:177),] 
 water1.2 <- water1.2[c(119:151),] 
 water2 <- water2[c(15:132),] 
 water2.2 <- water2.2[c(152:293),] 
@@ -52,9 +51,11 @@ water2.2 <- water2.2 %>% select(c(Sample.Id, contains("ppb.")))
 water3 <- water3 %>% select(c(Sample.Id, contains("ppb.")))
 
 #remove any columns(elements) that are not in all the datasets
+
 water2names <- colnames(water2)
 
 #remove old int.stds.
+
 water1 <- water1 %>% select(any_of(water2names))
 water1.2 <- water1.2 %>% select(any_of(water2names))
 
@@ -99,10 +100,12 @@ labblank <- water_all %>% filter( grepl("LAB", Sample.Id))
 MFB <- water_all %>% filter(grepl("MFB$",Sample.Id) | grepl("MFB",Sample.Id))
 
 #merge QC data
+
 water_QAQC <- rbind(dblanks, USGS_T239, USGS_M224,bottleblank,filterblank,MFB, labblank)
 
 
 # filter out ICPMS QAQC
+
 water_data <- water_all %>% filter(!grepl("^CCV", Sample.Id)) %>%
   filter(!grepl("CCV$", Sample.Id)) %>%
   filter(!grepl("^STD", Sample.Id)) %>%
@@ -148,49 +151,61 @@ water_data <- data %>%
 
 summary(dblanks)
 
-<<<<<<< HEAD
-dblanks <- dblanks[-8,]
 
-=======
->>>>>>> 8ca2e46a663fe8f2f9c305a380dfd0b13733c37b
-#calculate MDL off of digestion blanks MDL = students t-value (99% CI for n-1 DF)*standard deviation. t value is 3.14 for 7 replicates
+# Function to replace outliers with NAs based on z-score
+
+replace_outliers_with_na <- function(x, threshold = 2) {
+  z_scores <- abs(scale(x))
+  x[z_scores > threshold] <- NA
+  return(x)
+}
+
+# Apply the function to each column in the data frame
+
+for (col in colnames(dblanks[,c(2:ncol(dblanks))])) {
+  dblanks[[col]] <- replace_outliers_with_na(dblanks[[col]])
+}
+
+
 
 #DF is number of rows -1
 
 #automate with R's quantile function and the number or rows in dataframe
-tvalue <- qt(.99,df=(length(dblanks[ ,1])-1))
-tvalue
-#hard calculation t value is 2.583 for n=17 (df=16) double check automate worked
 
+tvalue <- qt(.99,df=(colSums(!is.na(dblanks[,2:34])))-1)
 
 #standard deviation blanks across of all elements 
+
 blanks.stdev <- dblanks[,2:34] %>%
-  summarise_all(sd)
+  summarise_all(sd, na.rm = TRUE)
 
 #mean of all elements 
+
 blanks.mean <- dblanks[,2:34] %>%
-  summarise_all(mean)
+  summarise_all(sd, na.rm = TRUE)
 
 #rotate data frame to calc mdl
+
 long.stdev <- pivot_longer(blanks.stdev,cols = everything(), names_to = "element", values_to = "stdev")
 long.mean <- pivot_longer(blanks.mean,cols = everything(), names_to = "element", values_to = "mean")
 
 #join
+
 long.mdlcalc <- left_join(long.stdev,long.mean, by="element")
 
 #calc mdl
+
 calc.mdl <-long.mdlcalc %>%
-  mutate(mdl = stdev*tvalue + mean)
+  mutate(mdl = stdev*tvalue)
 
 #remove other mean and stdev
+
 mdl <- calc.mdl[,c(1,4)]
 
 #rotate dataframe back 
 
 mdl <- mdl %>%
   pivot_wider(names_from = "element", values_from = "mdl")
-
-
 
 ### Censor data based on calculated MDL values ----
 
@@ -232,15 +247,10 @@ summary(water_correct)
 
 ## Save cleaned data---- 
 
-<<<<<<< HEAD
+
 write.csv(water_correct, file.path("./2_incremental","230731_Water_Metals_long_diff.csv"))
-write.csv(water_QAQC, file.path("./2_incremental","230731_WaterQAQC_diff.csv"))
-=======
+
 write.csv(water_correct, file.path("./2_incremental","230731_Water_Metals_long.csv"))
-write.csv(water_QAQC, file.path("./2_incremental","230731_WaterQAQC.csv"))
->>>>>>> 8ca2e46a663fe8f2f9c305a380dfd0b13733c37b
-
-
 
 ## Extract date, size, and site from the Sample.Id----
 water_seperate <- water_correct %>%
@@ -268,9 +278,7 @@ water_size <- water_calc %>%
 
 ##save finished data ----
 
-<<<<<<< HEAD
+
 write.csv(water_size, file.path("./2_incremental","230801_Water_Metals_Size_diff.csv"))
-=======
-write.csv(water_size, file.path("./2_incremental","230801_Water_Metals_Size.csv"))
->>>>>>> 8ca2e46a663fe8f2f9c305a380dfd0b13733c37b
+
 
