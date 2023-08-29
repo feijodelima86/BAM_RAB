@@ -11,354 +11,63 @@ library("splines")
 library("effects")
 library("mgcv")
 
-COMPARTMENTS <- data.frame(read.csv("2_incremental/TURNOVER_Full_Dataset2.csv"))
 
-#COMPARTMENTS <- read_csv("2_incremental/wateralgae13_WORKING_MANUAL.csv")
-
-###GLMS####
 
 ###Truly Dissolved Across Elements###
 
-names(COMPARTMENTS)
+### As ###
 
-mix.int_Pb <- glm(Pb ~ (TD.Pb + TURNOVER) : SAMPLE_DESCRIPTOR, data = COMPARTMENTS_AVG, family=gaussian)
+mix.int_As <- glm(As ~ (UF_As * TURNOVER) * SAMPLE_DESCRIPTOR, data = COMPARTMENTS_AVG, family=gaussian)
+
+summary(mix.int_As)
+
+with(summary(mix.int_As), 1 - deviance/null.deviance)
+
+plot(allEffects(mix.int_As))
+
+### Cd ###
+
+mix.int_Cd <- glm(Cd ~ (UF_Cd * TURNOVER) * SAMPLE_DESCRIPTOR, data = COMPARTMENTS_AVG, family=gaussian)
+
+summary(mix.int_Cd)
+
+with(summary(mix.int_Cd), 1 - deviance/null.deviance)
+
+plot(allEffects(mix.int_Cd))
+
+### Cu ###
+
+mix.int_Cu <- glm(Cu ~ (UF_Cu * TURNOVER) : SAMPLE_DESCRIPTOR, data = COMPARTMENTS_AVG, family=gaussian)
+
+summary(mix.int_Cu)
+
+with(summary(mix.int_Cu), 1 - deviance/null.deviance)
+
+plot(allEffects(mix.int_Cu))
+
+### P ###
+
+mix.int_P <- glm(Pb ~ (UF_P * TURNOVER) : SAMPLE_DESCRIPTOR, data = COMPARTMENTS_AVG, family=gaussian)
+
+summary(mix.int_P)
+
+with(summary(mix.int_P), 1 - deviance/null.deviance)
+
+plot(allEffects(mix.int_P))
+
+### Pb ###
+
+mix.int_Pb <- glm(Pb ~ (UF_Pb * TURNOVER) : SAMPLE_DESCRIPTOR, data = COMPARTMENTS_AVG, family=gaussian)
 
 summary(mix.int_Pb)
 
 with(summary(mix.int_Pb), 1 - deviance/null.deviance)
 
+plot(allEffects(mix.int_Pb))
 
-plotGLM_Pb <- ggplot(mix.int_Pb, aes(TD.Pb, Pb, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Cu  (TD, \u00b5g/l)",    
-       y= "Cu Content (mg/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Pb, y=Pb, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
+########
 
-
-plotGLM_Pb <- ggplot(mix.int_Pb, aes(TURNOVER, Pb, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Turnover",    
-       y= "Cu Content (mg/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TURNOVER, y=Pb, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-
-mix.int_Cu <- glm(Cu ~ (TD.Cu + TURNOVER) : SAMPLE_DESCRIPTOR, data = COMPARTMENTS_AVG, family=gaussian)
-
-summary(mix.int_Cu)
-
-with(summary(mix.int_Cd), 1 - deviance/null.deviance)
-
-
-plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Cu  (TD, \u00b5g/l)",    
-       y= "Cu Content (mg/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Cu, y=Cu, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-
-plotGLM_Cu <- ggplot(mix.int_Cu, aes(TURNOVER, Cu, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Cu  (TD, \u00b5g/l)",    
-       y= "Cu Content (mg/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TURNOVER, y=Cu, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-
-mix.int_Cu <- glm(Cu ~ (TD.Cu + TURNOVER) : SAMPLE_DESCRIPTOR, data = COMPARTMENTS_AVG, family=gaussian)
-
-summary(mix.int_Cu)
-
-with(summary(mix.int_Cd), 1 - deviance/null.deviance)
-
-
-plotGLM_Cd <- ggplot(mix.int_Cd, aes(TD.Cd, Cd, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Cd  (TD, \u00b5g/l)",    
-       y= "Cd Content (mg/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Cd, y=Cd, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-
-plotGLM_Cd <- ggplot(mix.int_Cd, aes(TURNOVER, Cd, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Cd  (TD, \u00b5g/l)",    
-       y= "Cd Content (mg/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TURNOVER, y=Cd, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-
-mix.int_As <- glm(As ~ TD.As * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-
-
-
-
-
-
-
-
-
-mix.int_Ca <- glm(Car ~ TD.Ca * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_Cd <- glm(Cd ~ TD.Cd * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_Cu <- glm(Cu ~ TD.Cu * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_Fe <- glm(Fer.1 ~ TD.Fe * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_Mo <- glm(Mo ~ TD.Mo * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_P <- glm(P ~ TD.P * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_Pb <- glm(Pb ~ TD.Pb * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_Se <- glm(Se ~ TD.Se * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_Zn <- glm(Znr ~ TD.Zn * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-
-
-summary(mix.int_As)
-summary(mix.int_Ca)
-summary(mix.int_Cd)
-summary(mix.int_Cu)
-summary(mix.int_Fe)
-summary(mix.int_Mo)
-summary(mix.int_P)
-summary(mix.int_Pb)
-summary(mix.int_Se)
-summary(mix.int_Zn)
-
-#dev.new()
-
-names(COMPARTMENTS)
-
-plotGLM_As <- ggplot(mix.int_As, aes(x=TD.As, y=As, group = SAMPLE_DESCRIPTOR)) +
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title="Title",
-       x= "As  (TD, \u00b5g/l)",    
-       y= "As Content (\u00b5g/g)")+
-  theme(axis.text=element_text(size=12),
-       axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.As, y=As, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_As
-
-plotGLM_Ca <- ggplot(mix.int_Ca, aes(TD.Ca, Car, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title="Title",
-       x= "Ca  (TD, \u00b5g/l)",    
-       y= "Ca Content (\u00b5g/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Ca, y=Car, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_Ca
-
-plotGLM_Cd <- ggplot(mix.int_Cd, aes(TD.Cd, Cd, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Cd  (TD, \u00b5g/l)",    
-       y= "Cd Content (mg/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Cd, y=Cd, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_Cd
-
-plot(allEffects(mix.int_Cd))
-
-plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Cu  (TD, \u00b5g/l)",    
-       y= "Cu Content (mg/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Cu, y=Cu, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_Cu
-
-plotGLM_Fe <- ggplot(mix.int_Fe, aes(TD.Fe, Fer.1, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  labs(title=NULL,
-       x= "Fe  (TD, \u00b5g/l)",    
-       y= "Fe Content (\u00b5g/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Fe, y=Fer.1, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_Fe
-
-plotGLM_Mo <- ggplot(mix.int_Mo, aes(TD.Mo, Mo, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  scale_x_continuous(trans='log10')+ 
-  labs(title=NULL,
-       x= "Mo  (TD, Log10 \u00b5g/l)",    
-       y= "Mo Content (\u00b5g/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Mo, y=Mo, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_Mo
-
-plotGLM_P <- ggplot(mix.int_P, aes(TD.P, P, col = as.factor(SAMPLE_DESCRIPTOR)))+  
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  scale_x_continuous(trans='log10')+ 
-  labs(title=NULL,
-       x= "P  (TD,Log10 \u00b5g/l)",    
-       y= "P Content (\u00b5g/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.P, y=P, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_P
-
-plotGLM_Pb <- ggplot(mix.int_Pb, aes(TD.Pb, Pb, col = as.factor(SAMPLE_DESCRIPTOR)))+  
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-#  scale_x_continuous(trans='log10')+ 
-  labs(title=NULL,
-       x= "Pb  (TD, \u00b5g/l)",    
-       y= "Pb Content (\u00b5g/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Pb, y=Pb, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_Pb
-
-plotGLM_Se <- ggplot(mix.int_Se, aes(TD.Se, Se, col = as.factor(SAMPLE_DESCRIPTOR)))+  
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  #  scale_x_continuous(trans='log10')+ 
-  labs(title=NULL,
-       x= "Se  (TD, \u00b5g/l)",    
-       y= "Se Content (\u00b5g/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Se, y=Se, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-plotGLM_Se
-
-plotGLM_Zn <- ggplot(mix.int_Zn, aes(TD.Zn, Znr, col = as.factor(SAMPLE_DESCRIPTOR)))+  
-  geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
-  scale_shape_manual(values=c(21))+
-  scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
-  scale_fill_manual(values=c('darkgreen','gold', 'chartreuse'), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+ 
-  #  scale_x_continuous(trans='log10')+ 
-  labs(title=NULL,
-       x= "Zn  (TD, \u00b5g/l)",    
-       y= "Zn Content (\u00b5g/g)")+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Zn, y=Znr, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
-              method="glm", 
-              formula = y ~ x, 
-              method.args=list(family="gaussian")) 
-
-
-plotGLM_Zn
-
-####Size Fractions Across Compartments####
-
-###Candidate Variables: As=EPIL Cd: All Cu:All Mo: All P: Epil Pb:All Se: EPIL
-
-#### As  ####
-
-EPIL.SS.As<-lm(As ~ SS.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIL"),])
+EPIL.SS.As<-lm(As ~ UF_As, data=COMPARTMENTS_AVG[which(COMPARTMENTS_AVG$SAMPLE_DESCRIPTOR == "EPIL"),])
 summary(EPIL.SS.As)
 
 EPIP.SS.As<-lm(As ~ SS.As, data=COMPARTMENTS[which(COMPARTMENTS$SAMPLE_DESCRIPTOR == "EPIP"),])

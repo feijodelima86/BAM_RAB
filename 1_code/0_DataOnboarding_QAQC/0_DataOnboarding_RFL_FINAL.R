@@ -60,7 +60,9 @@ add.comp<-list(algaedata,waterdata,turnoverdata)
 
 alldata<-add.comp %>% reduce(full_join)
 
-### aggredating dataset ###
+write.csv(alldata, "2_incremental/TURNOVER_Full_Dataset.csv")
+
+### aggredating dataset by means###
 
 COMPARTMENTS_AVG <-aggregate(x = alldata[,colnames(alldata) != c("SAMPLING_DATE","SITE","SAMPLE_DESCRIPTOR")],          
                              by = list(alldata$SAMPLING_DATE,alldata$SITE,alldata$SAMPLE_DESCRIPTOR),
@@ -72,5 +74,5 @@ names(COMPARTMENTS_AVG)
 
 colnames(COMPARTMENTS_AVG)[c(1:3)]<-c("SAMPLING_DATE","SITE","SAMPLE_DESCRIPTOR")
 
-write.csv(COMPARTMENTS_AVG, "2_incremental/TURNOVER_Full_Dataset.csv")
+write.csv(COMPARTMENTS_AVG, "2_incremental/TURNOVER_Full_Dataset_AVG.csv")
 

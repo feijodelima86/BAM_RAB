@@ -2,20 +2,19 @@ library(plyr)
 library(tidyverse)
 library(readr)
 
-alldata <- read.csv("2_incremental/20220420_STANDING_CROP.csv")
-
+alldata <- read.csv("2_incremental/TURNOVER_Full_Dataset.csv")
 
 names(alldata)
 
 # Selecting variables
 
-n<-7
-n2<-13 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
+n<-6
+n2<-34 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
 
 #Names of axes
 
 Xlabel=expression(bold(paste("Standing Crop"~"(g/m"^"2"~")")))
-Ylabel=expression(bold("As Burden (mg/g)"))
+Ylabel=expression(bold("Pb Content (mg/g)"))
 
 #Subsetting by compartment
 
@@ -30,8 +29,9 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 #Graphical paramenters
 
-BW1<-5     #Smoothing for x axis dispersion
-BW2<-0.009      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
+BW1<-7     #Smoothing for x axis dispersion
+BW2<-0.006      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
+#BW2<-0.007      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
 ALPHA<-0.6  #Transparency of dispersion curves
 
 dev.new()
@@ -165,11 +165,11 @@ title(xlab=Xlabel, line=2.5, cex.lab=1.5, family="Calibri")
 title(ylab=Ylabel, line=2.7, cex.lab=1.5, family="Calibri")
 
 
-points(dfEPIL[,7], dfEPIL[,n2],pch=23, cex=2,col="black", bg=colors()[89],lwd=3)
+points(dfEPIL[,n], dfEPIL[,n2],pch=23, cex=2,col="black", bg=colors()[89],lwd=3)
 
-points(dfEPIP[,7], dfEPIP[,n2],pch=23, cex=2,col="black", bg="gold",lwd=3)
+points(dfEPIP[,n], dfEPIP[,n2],pch=23, cex=2,col="black", bg="gold",lwd=3)
 
-points(dfFILA[,7], dfFILA[,n2],pch=23, cex=2,col="black", bg="chartreuse3",lwd=3)
+points(dfFILA[,n], dfFILA[,n2],pch=23, cex=2,col="black", bg="chartreuse3",lwd=3)
 
 box(lwd=2)
 

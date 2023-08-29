@@ -1,6 +1,4 @@
-library(readr)
-library(gbm)
-library(dismo)
+
 library(MASS)
 library(usdm)
 library(dplyr)

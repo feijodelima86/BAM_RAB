@@ -29,7 +29,7 @@ names(alldata)
 
 # 7 = biomass, 58 = Cd 73 = Pb, 70=Mo , Cu=61, As=52
 
-n1<-74
+n1<-61
 
 # If turnover rates are desired
 
@@ -133,11 +133,11 @@ ardat3 <- lapply(1:L,function(x){
 
 #create empty plot
 
-dev.new(width=10, height=5, noRStudioGD = TRUE)
+#dev.new(width=10, height=5, noRStudioGD = TRUE)
 par(mar=c(4,6,4,4))
 plot(ALL.SUM[,1], ALL.SUM[,5],
      type='n',
-     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 0.7, f = ceiling)),
+     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 5, f = ceiling)),
      xlim= c(as.Date("2021-06-20"),as.Date("2021-10-30")),
      ylab=NA, 
      yaxt = "n",
