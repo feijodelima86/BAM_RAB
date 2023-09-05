@@ -1,4 +1,6 @@
 library(readr)
+library(tidyverse)
+
 
 algaedata <- data.frame(read.csv("2_incremental/20220420_STANDING_CROP_Rafa_Interpolation_2.csv"))
 
