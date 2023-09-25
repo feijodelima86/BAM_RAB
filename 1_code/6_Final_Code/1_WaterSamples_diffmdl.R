@@ -22,8 +22,6 @@ water2 <- read.csv(file.path("./0_data/icp_ms_internal","230608_BAMRABrun2.1.csv
 water2.2 <- read.csv(file.path("./0_data/icp_ms_internal","230609_BAMRAB2.2.csv"), header=T, na.strings = c(""))
 water3 <- read.csv(file.path("./0_data/icp_ms_internal","230616_BAMRAB3.1.csv"), header=T, na.strings = c(""))
 
-
-
 # load sample info
 #sampleinfo <- read.csv(file.path("./0_data","SampleInfo.csv"), header=T, na.strings = c(""))
 
@@ -59,8 +57,8 @@ water2names <- colnames(water2)
 water1 <- water1 %>% select(any_of(water2names))
 water1.2 <- water1.2 %>% select(any_of(water2names))
 
-
 #bind data frames together
+
 water1 <- rbind(water1, water1.2 )
 water2 <- rbind(water2, water2.2)
 
@@ -73,7 +71,9 @@ water3 <- water3[c(1:105, 108:235),] # T-239s that were labeled incorectly as Db
 
 names <- colnames(water)
 print(names)
+
 #rename columns for water1
+
 water_names <- water %>% rename( c(Ca = starts_with("Ca"),Mg = starts_with("Mg"),Al = starts_with("Al"), S = starts_with("S."),P = starts_with("P."),K = starts_with("K"),Na = starts_with("Na"), V = starts_with("V"),Cr_KED =starts_with("Cr..52"),Cr_NH3 = starts_with("Cr..53"),Fe_NH3 = starts_with("Fe..54"),Mn = starts_with("Mn"),Fe_KED = starts_with("Fe..56"),Co = starts_with("Co"),Ni = starts_with("Ni"),Cu_KED = starts_with("Cu..63"),Cu_NH3 = starts_with("Cu..65"),Zn = starts_with("Zn"),As_STD = starts_with("As.75"),As_KED = starts_with("As.KED"),As_Oshift = starts_with("As.Oshift"),Se77_Oshift = starts_with("Se..77..Oshift"),Se78_Oshift = starts_with("Se..78..Oshift"),Se80_Oshift = starts_with("Se..80..Oshift"),Se82_Oshift = starts_with("Se..82..Oshift"),Se77_Oshift = starts_with("Se..77..Oshift"),Mo_NH3 = starts_with("Mo..95..NH3"),Mo_Oshift = starts_with("Mo..95..Oshift"),Cd111 = starts_with("Cd..111"),Cd114 = starts_with("Cd..114"),Pb_STD = starts_with("Pb.208"),Pb_NH3 = starts_with("Pb.NH3")))
 
 #rename water3
@@ -93,11 +93,13 @@ USGS_M224 <- water_all %>% filter(grepl("M-224", Sample.Id) | grepl("224$", Samp
 
 bottleblank <- water_all %>% filter( grepl("BB$", Sample.Id))
 
-filterblank <- water_all %>% filter( grepl("FB$", Sample.Id))
+filterblank <- water_all %>% filter( grepl("_FB$", Sample.Id))
 
 labblank <- water_all %>% filter( grepl("LAB", Sample.Id))
 
 MFB <- water_all %>% filter(grepl("MFB$",Sample.Id) | grepl("MFB",Sample.Id))
+
+test<-rbind(filterblank, labblank)
 
 #merge QC data
 
@@ -127,6 +129,7 @@ water_data <- water_all %>% filter(!grepl("^CCV", Sample.Id)) %>%
   filter(!grepl("^LLOQ", Sample.Id))
 
 #filter out all QAQC
+
 qaqcnames<- unique(water_QAQC$Sample.Id)
 
 data <-  water_data %>% filter(!grepl("DBLANK", Sample.Id)) %>%
@@ -146,11 +149,9 @@ data <-  water_data %>% filter(!grepl("DBLANK", Sample.Id)) %>%
 water_data <- data %>%
   distinct(Sample.Id, .keep_all = TRUE)
 
-
 ###calculate MDLs using digestion blanks ----
 
 summary(dblanks)
-
 
 # Function to replace outliers with NAs based on z-score
 
@@ -165,8 +166,6 @@ replace_outliers_with_na <- function(x, threshold = 2) {
 for (col in colnames(dblanks[,c(2:ncol(dblanks))])) {
   dblanks[[col]] <- replace_outliers_with_na(dblanks[[col]])
 }
-
-
 
 #DF is number of rows -1
 
@@ -276,9 +275,12 @@ water_size <- water_calc %>%
   mutate(trulydissolved = UF)
 
 
+size_wide <- water_size %>%
+  pivot_wider(names_from = "Element", values_from = c("UF","F","W","spm","colloidal","trulydissolved"))
+
 ##save finished data ----
 
 
-write.csv(water_size, file.path("./2_incremental","230801_Water_Metals_Size_diff.csv"))
+write.csv(size_wide, file.path("./2_incremental","230801_Water_Metals_Size_diff.csv"))
 
 

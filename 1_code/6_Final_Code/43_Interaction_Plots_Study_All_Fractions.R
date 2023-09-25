@@ -30,11 +30,9 @@ COMPARTMENTS_AVG$SITE <- as.factor(COMPARTMENTS_AVG$SITE)
 
 # No OLRM, log scale for conc. []s  sig. Int, marg sig.
 
-Al_DF <- (COMPARTMENTS_AVG[,c("F_Al","TURNOVER","Alr")])
+Al_DF <- (COMPARTMENTS_AVG[,c("colloidal_Al","TURNOVER","Alr")])
 
 Al_DF <- Al_DF[complete.cases(Al_DF), ]
-
-Al_DF$F_Al <- log10(Al_DF$F_Al)
 
 Al_DF$TURNOVER <- asin(sqrt(Al_DF$TURNOVER ))
 
@@ -46,15 +44,21 @@ Al_DF$cat <- cut(Al_DF$TURNOVER,
 
 names(Al_DF)<- c("F_Al", "TURNOVER", "Al", "cat")
 
+Al_DF<-Al_DF[Al_DF$F_Al>0,]
+
+Al_DF$F_Al <- log10(Al_DF$F_Al)
+
 Al_TD <- glm(Al ~ F_Al, data = Al_DF, family=gaussian)
+
+Al_TD_2 <- glm(Al ~ TURNOVER, data = Al_DF, family=gaussian)
 
 no.int_Al_TD  <- glm(Al ~ (F_Al + TURNOVER), data = Al_DF, family=gaussian)
 
 mix.int_Al_TD <- glm(Al ~ (F_Al * TURNOVER), data = Al_DF, family=gaussian)
 
-models <- list(Al_TD, mix.int_Al_TD, no.int_Al_TD)
+models <- list(Al_TD, Al_TD_2, mix.int_Al_TD, no.int_Al_TD)
 
-aictab(c(models), modnames=c("Al_TD","mix.int_Al_TD","no.int_Al_TD"), method=ML)
+aictab(c(models), modnames=c("Al_TD","Al_TD_2","mix.int_Al_TD","no.int_Al_TD"), method=ML)
 
 plot(allEffects(mix.int_Al_TD), lines = list(multiline = T), confint = list(style = "auto"))
 
@@ -65,6 +69,8 @@ Anova(mix.int_Al_TD)
 with(summary(mix.int_Al_TD), 1 - deviance/null.deviance)
 
 ### Al all Plots ###
+
+#dev.new()
 
 Al_p=ggplot(data=Al_DF,aes(F_Al,Al))+
   geom_point(aes(color=factor(cat)),size=4)+
@@ -83,6 +89,11 @@ Al_p
 names(Al_DF)
 
 Al_loess <- loess(Al ~ F_Al * TURNOVER, data = Al_DF)
+
+Anova(mix.int_Al_TD)
+
+with(summary(mix.int_Al_TD), 1 - deviance/null.deviance)
+
 
 # Create a sequence of incrementally increAling (by 0.3 units) values for both wt and hp
 
@@ -122,7 +133,7 @@ fig_Al <- plot_ly(Al.melt, x = ~F_Al, y = ~TURNOVER, z = ~Al, type = "contour",
 
 #### As ####
 
-As_DF <- (COMPARTMENTS_AVG[,c("F_As_Oshift","TURNOVER","As")])
+As_DF <- (COMPARTMENTS_AVG[,c("trulydissolved_As_Oshift","TURNOVER","As")])
 
 As_DF <- As_DF[complete.cases(As_DF), ]
 
@@ -135,6 +146,8 @@ As_DF$cat <- cut(As_DF$TURNOVER,
                  labels=c("NA", "0.21 - 0.46","0.46 - 0.50","0.50 - 0.54","0.54 - 0.59","0.59 - 0.76"))
 
 names(As_DF)<- c("F_As", "TURNOVER", "As", "cat")
+
+As_DF<-As_DF[As_DF$F_As>0.03636364,]
 
 As_DF$F_As <- log10(As_DF$F_As+1)
 

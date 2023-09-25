@@ -4,7 +4,7 @@ library(tidyverse)
 
 algaedata <- data.frame(read.csv("2_incremental/20220420_STANDING_CROP_Rafa_Interpolation_2.csv"))
 
-waterdata <- data.frame(read.csv("2_incremental/230731_Water_Metals_long_diff.csv"))
+waterdata <- data.frame(read.csv("2_incremental/230801_Water_Metals_Size_diff.csv"))
 
 turnoverdata <- read_csv("2_incremental/TURNOVER_REDUX.csv")
 
@@ -20,31 +20,21 @@ algaedata<-algaedata[,-c(1,2)]
 
 names(waterdata)
 
-water_seperate <- waterdata %>%
-  # Separate the date, size, and site using str_extract 
-  mutate(
-    date = str_extract(Sample.Id, "\\d+_\\d+_\\d+"),             # Extract date in the format: 6_21_21
-    filtersize = str_extract(Sample.Id, "(W|UF|F)"),                   # Extract size (W, UF, or F)
-    site = str_extract(Sample.Id, "(?<=_(W|UF|F)_)(\\d+)")       # Extract the site using lookbehind regex
-  ) %>%
-  # Convert date to the actual date type using lubridate package
-  mutate(date = mdy(date))
+colnames(waterdata)[c(2:3)]<-c("SITE","SAMPLING_DATE")
 
-water_calc <- water_seperate %>%
-  pivot_wider(id_cols = c(site, date),values_from = Concentration, names_from = c(filtersize, Element), values_fn = mean)
+water_calc<-waterdata
 
+factor(waterdata$SAMPLING_DATE)
 
-colnames(water_calc)[c(1:2)]<-c("SITE","SAMPLING_DATE")
+factor(waterdata$SITE)
 
-water_calc$SITE <- factor(water_calc$SITE, labels = c("WS","BG","BN","DL","GR","GC"))
+water_calc<-data.frame(waterdata)
 
-water_calc$SAMPLING_DATE<-as.Date(water_calc$SAMPLING_DATE, format = "%m/%d/%Y")
+water_calc$SITE <- factor(water_calc$SITE, labels = c("WS","DL","GR","GC","BG","BN"))
 
-water_calc<-data.frame(water_calc)
+waterdata<-data.frame(water_calc)
 
 colnames(water_calc)
-
-waterdata<-water_calc[,c(1,2,6,13,19,20,23,29,31,33,35,39,46,52,53,56,62,64,66,68,72,79,85,86,89,95,97,99,101)]
 
 factor(waterdata$SAMPLING_DATE)
 
