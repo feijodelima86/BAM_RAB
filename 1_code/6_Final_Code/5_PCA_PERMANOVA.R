@@ -34,7 +34,7 @@ names(COMPARTMENTS)
 
 LABELS<-as.data.frame(na.omit(COMPARTMENTS[,c(3,4,6,12,13,18,19,20,21,22,25,29,30,31,33,35,36,40,49)]))
 LABELS<-LABELS[order(LABELS$SAMPLE_DESCRIPTOR, decreasing = F), ]
-EPIL.COR.DF3<-as.data.frame(na.omit(EPIL.COR.DF3[,c(12,13,18,19,20,21,22,25,29,30,31,33,35,36,40,49)]))
+EPIL.COR.DF3<-as.data.frame(na.omit(COMPARTMENTS[,c(12,13,18,19,20,21,22,25,29,30,31,33,35,36,40,49)]))
 PCA.DF<-as.data.frame(LABELS[,c(4:ncol(LABELS))])
 names(PCA.DF)<- c("Al","As","Ca","Cd","Co","Cr","Cu","Fe","Mg","Mn","Mo","Ni","Pb","S","Se","Zn")
 
@@ -127,7 +127,7 @@ arrows(0, 0,
        lty = par("lty"))
 
 text(	x=correlations[,1]*1.075,
-      y=correlations[,2]*1.05,
+      y=correlations[,2]*1.075,
       labels = names(PCA.DF), 
       cex=1.0,
       font=2)
@@ -150,7 +150,7 @@ mtext("y2",side=4,line=2, col="Blue")
 abline(h=c(0,0))
 abline(v=c(0,0))
 
-my.prc
+
 
 
 

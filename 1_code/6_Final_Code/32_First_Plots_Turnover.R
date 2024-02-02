@@ -29,11 +29,11 @@ names(alldata)
 
 # 7 = biomass, 58 = Cd 73 = Pb, 70=Mo , Cu=61, As=52
 
-n1<-61
+n1<-58
 
 # If turnover rates are desired
 
-#alldata[,n1]<-alldata[,n1]*alldata[,89]
+alldata[,n1]<-alldata[,n1]*alldata[,89]
 
 #Selected site 
 

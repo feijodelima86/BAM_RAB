@@ -29,7 +29,7 @@ names(COMPARTMENTS_AVG)
 
 COMPARTMENTS_AVG$SITE <- as.factor(COMPARTMENTS_AVG$SITE)
 
-replace_outliers_with_na <- function(x, threshold = 3) {
+replace_outliers_with_na <- function(x, threshold = 2) {
   z_scores <- abs(scale(x))
   x[z_scores > threshold] <- NA
   return(x)
@@ -38,7 +38,7 @@ replace_outliers_with_na <- function(x, threshold = 3) {
 
 #### Cd ####
 
-Cd_DF <- cbind(paste(COMPARTMENTS_AVG$SAMPLING_DATE ,COMPARTMENTS_AVG$SITE), (COMPARTMENTS_AVG[,c("FIELD.REP","spm_Cd114","colloidal_Cd114","trulydissolved_Cd114","TURNOVER","Cd")]))
+Cd_DF <- cbind(COMPARTMENTS_AVG[,c("SITE","FIELD.REP","spm_Cd114","colloidal_Cd114","trulydissolved_Cd114","TURNOVER","Cd"),],(paste(COMPARTMENTS_AVG$SAMPLING_DATE ,COMPARTMENTS_AVG$SITE)))
 
 Cd_DF
 
@@ -52,9 +52,9 @@ Cd_DF$cat <- cut(Cd_DF$TURNOVER,
 
 ### Cd_TRD ###
 
-Cd_TRD <- (Cd_DF[,c(1,2,5,6,7,8)])
+Cd_TRD <- (Cd_DF[,c(1,2,5,6,7,8,9)])
 
-names(Cd_TRD)<- c("DATESITE", "REP", "Cd_TRD", "TURNOVER", "Cd", "cat")
+names(Cd_TRD)<- c("SITE", "REP", "Cd_TRD", "TURNOVER", "Cd","DATESITE", "cat")
 
 Cd_TRD<-Cd_TRD[Cd_TRD$Cd_TRD>0,]
 
@@ -65,8 +65,6 @@ for (col in colnames(Cd_TRD[,c(1)])) {
 }
 
 Cd_TRD <- Cd_TRD[complete.cases(Cd_TRD), ]
-
-#dev.new()
 
 glmm.int_Cd_TRD <- glmer(formula = Cd ~ (Cd_TRD * TURNOVER) + (1|DATESITE),
                         data = Cd_TRD,
@@ -193,5 +191,41 @@ lines(x=X, y=range(Y), lwd=4)
 
 ###########
 
+N =100; set.seed(123);
 
+
+x1 = runif(N)*3; readings1 <- 2*x1 + 1.0 + rnorm(N)*.99;
+x2 = runif(N)*3; readings2 <- 3*x2 + 1.5 + rnorm(N)*.99;
+x3 = runif(N)*3; readings3 <- 4*x3 + 2.0 + rnorm(N)*.99;
+x4 = runif(N)*3; readings4 <- 5*x4 + 2.5 + rnorm(N)*.99;
+x5 = runif(N)*3; readings5 <- 6*x5 + 3.0 + rnorm(N)*.99;
+
+X = c(x1,x2,x3,x4,x5);
+Y = c(readings1,readings2,readings3,readings4,readings5)
+Grouping  = c(rep(1,N),rep(2,N),rep(3,N),rep(4,N),rep(5,N))
+
+library(lme4);
+LMERFIT <- lmer(Y ~ 1+ X+ (X|Grouping))
+
+RIaS <-unlist( ranef(LMERFIT)) #Random Intercepts and Slopes
+FixedEff <- fixef(LMERFIT)    # Fixed Intercept and Slope
+
+png('SampleLMERFIT_withRandomSlopes_and_Intercepts.png', width=800,height=450,units="px" )
+par(mfrow=c(1,2))
+plot(X,Y,xlab="x",ylab="readings")
+plot(x1,readings1, xlim=c(0,3), ylim=c(min(Y)-1,max(Y)+1), pch=16,xlab="x",ylab="readings" )
+points(x2,readings2, col='red', pch=16)
+points(x3,readings3, col='green', pch=16)
+points(x4,readings4, col='blue', pch=16)
+points(x5,readings5, col='orange', pch=16)
+abline(v=(seq(-1,4 ,1)), col="lightgray", lty="dotted");        
+abline(h=(seq( -1,25 ,1)), col="lightgray", lty="dotted")   
+
+lines(x1,FixedEff[1]+ (RIaS[6] + FixedEff[2])* x1+ RIaS[1], col='black')
+lines(x2,FixedEff[1]+ (RIaS[7] + FixedEff[2])* x2+ RIaS[2], col='red')
+lines(x3,FixedEff[1]+ (RIaS[8] + FixedEff[2])* x3+ RIaS[3], col='green')
+lines(x4,FixedEff[1]+ (RIaS[9] + FixedEff[2])* x4+ RIaS[4], col='blue')
+lines(x5,FixedEff[1]+ (RIaS[10]+ FixedEff[2])* x5+ RIaS[5], col='orange') 
+legend(0, 24, c("Group1","Group2","Group3","Group4","Group5" ), lty=c(1,1), col=c('black','red', 'green','blue','orange'))
+dev.off()
 

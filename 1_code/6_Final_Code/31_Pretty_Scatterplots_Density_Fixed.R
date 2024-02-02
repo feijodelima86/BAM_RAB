@@ -9,12 +9,12 @@ names(alldata)
 # Selecting variables
 
 n<-6
-n2<-34 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:35, Zn:49)
+n2<-22 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:34, Zn:49)
 
 #Names of axes
 
 Xlabel=expression(bold(paste("Standing Crop"~"(g/m"^"2"~")")))
-Ylabel=expression(bold("Pb Content (mg/g)"))
+Ylabel=expression(bold("Cu Content (mg/g)"))
 
 #Subsetting by compartment
 
@@ -143,7 +143,11 @@ axis(side = 1, at = aty1, labels=format(aty1, scientific=F,digits = 1), las=1, f
 
 #Plot 3
 
-par(mar=c(4.5, 4.5, 0.5, 0.5))
+
+
+dev.new()
+
+par(mar=c(5, 6, 3, 3))
 
 plot(alldata[,n], alldata[,n2], 
      ylim = range(alldata[,n2],na.rm=TRUE),
@@ -161,15 +165,15 @@ aty <- seq(0, max(alldata[,n2], na.rm=TRUE), length.out=5)
 axis(side = 1, at = seq(0, 200, length.out=5), las=1, font.axis=2, cex.axis=1)
 axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1)
 
-title(xlab=Xlabel, line=2.5, cex.lab=1.5, family="Calibri")
-title(ylab=Ylabel, line=2.7, cex.lab=1.5, family="Calibri")
+title(xlab=Xlabel, line=3, cex.lab=1.5, family="Calibri")
+title(ylab=Ylabel, line=3, cex.lab=1.5, family="Calibri")
 
 
-points(dfEPIL[,n], dfEPIL[,n2],pch=23, cex=2,col="black", bg=colors()[89],lwd=3)
+points(dfEPIL[,n], dfEPIL[,n2],pch=23, cex=2,col="black", bg='darkolivegreen4',lwd=3)
 
-points(dfEPIP[,n], dfEPIP[,n2],pch=23, cex=2,col="black", bg="gold",lwd=3)
+points(dfEPIP[,n], dfEPIP[,n2],pch=24, cex=2,col="black", bg="gold",lwd=3)
 
-points(dfFILA[,n], dfFILA[,n2],pch=23, cex=2,col="black", bg="chartreuse3",lwd=3)
+points(dfFILA[,n], dfFILA[,n2],pch=25, cex=2,col="black", bg="chartreuse3",lwd=3)
 
-box(lwd=2)
+box(lwd=3)
 
