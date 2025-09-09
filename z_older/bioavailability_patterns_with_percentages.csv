@@ -1,0 +1,13 @@
+"Metal","Pattern","Hierarchy","Pct_Dissolved","Pct_Colloidal","Pct_Particulate"
+"As","Dissolved + Colloidal Uptake","F > UF > W",87.7,5.7,6.6
+"Cd","Dissolved + Colloidal Uptake","F > UF > W",45.1,12.7,42.1
+"Co","Dissolved + Colloidal Uptake","F > W > UF",42.5,16.9,40.6
+"Cr","Dissolved-Only Uptake","UF > F > W",37,11,52
+"Cu","Dissolved + Colloidal Uptake","F > UF > W",32.7,26.4,40.9
+"Fe","Dissolved-Only Uptake","UF > W > F",1.6,13.6,84.9
+"Mn","Dissolved-Only Uptake","UF > F > W",40.5,4.9,54.6
+"Mo","Particulate-Enhanced Uptake","W > F > UF",82.1,5,13
+"Ni","Dissolved + Colloidal Uptake","F > UF > W",61.7,11,27.3
+"Pb","Dissolved-Only Uptake","UF > F > W",14,19.8,66.2
+"Se","Dissolved-Only Uptake","UF > F > W",41.6,23.8,34.6
+"Zn","Particulate-Enhanced Uptake","W > F > UF",31.8,29.8,38.4

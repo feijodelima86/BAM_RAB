@@ -3,37 +3,28 @@ library(readr)
 library(plyr)
 library(dplyr)
 
-alldata <- data.frame(read_csv("2_incremental/20220420_STANDING_CROP_Rafa_Interpolation_Dont_Use.csv"))
-
-alldata$SAMPLING_DATE<-as.Date(alldata$SAMPLING_DATE, format = "%m/%d/%Y")
-
-TURNOVER <- read_csv("2_incremental/TURNOVER_REDUX.csv")
-
-TURNOVER$SAMPLING_DATE<-as.Date(TURNOVER$SAMPLING_DATE, format = "%m/%d/%Y")
-
-add.comp<-list(alldata,TURNOVER)
-
-alldata<-add.comp %>% reduce(full_join)
-
-write.csv(alldata, "2_incremental/TURNOVER_Full_Dataset.csv")
-
+alldata <- data.frame(read_csv("2_incremental/TURNOVER_Full_Dataset_SEP.csv"))
 
 #standard error functiton
 
-se <- function(x, ...) sqrt(var(x, ...)/length(x))
+se <- function(x, ...) sqrt(var(x, na.rm=T, ...)/length(x))
 
 
 # Selected element
 
 names(alldata)
 
-# 7 = biomass, 58 = Cd 73 = Pb, 70=Mo , Cu=61, As=52
+# 6 = biomass, 58 = Cd 73 = Pb, 70=Mo , Cu=61, As=52
 
-n1<-58
+n1<-72
 
-# If turnover rates are desired
+# Calculating Turnover rates
 
-alldata[,n1]<-alldata[,n1]*alldata[,89]
+#C is 0.5 biomass. Turnover rates are Production divided by 0.5 biomass.
+
+TR<-(2*as.numeric(alldata[,287])/as.numeric(alldata[,6]))
+
+alldata[,n1]<-alldata[,n1]*TR
 
 #Selected site 
 
@@ -45,7 +36,7 @@ dfEPIP <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "EPIP"),]
 
 dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
-alldata
+##If turnover rates are desired SEP = 287, NEW = 288, OLD = 289
 
 # Multiplier for unit conversion. 
 
@@ -71,7 +62,6 @@ EPIP.SUM <- subset(EPIP.SUM, SITE == ssite)
 names(EPIP.SUM)<-c("DATE","SITE","MEAN.EPIP","STDER.EPIP")
 EPIP.SUM[,5]<--2
 EPIP.SUM[,c(3,4)]<-EPIP.SUM[,c(3,4)]*mult 
-
 
 ALL.SUM<-list(EPIP.SUM,FILA.SUM,EPIL.SUM)
 
@@ -137,7 +127,7 @@ ardat3 <- lapply(1:L,function(x){
 par(mar=c(4,6,4,4))
 plot(ALL.SUM[,1], ALL.SUM[,5],
      type='n',
-     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4]), 5, f = ceiling)),
+     ylim=c(0, plyr::round_any(max(ALL.SUM[3]+ALL.SUM[6]+ALL.SUM[8]+ALL.SUM[4])*1.2, 0.01, f = ceiling)),
      xlim= c(as.Date("2021-06-20"),as.Date("2021-10-30")),
      ylab=NA, 
      yaxt = "n",

@@ -81,7 +81,6 @@ summary(mix.int_Se)
 Anova(mix.int_Zn)
 summary(mix.int_Zn)
 
-
 #dev.new()
 
 names(COMPARTMENTS)

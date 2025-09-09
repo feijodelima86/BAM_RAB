@@ -42,7 +42,7 @@ mix.int_As <- glm(As ~ TD.As * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=ga
 mix.int_Ca <- glm(Car ~ TD.Ca * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
 mix.int_Cd <- glm(Cd ~ TD.Cd * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
 mix.int_Cu <- glm(Cu ~ TD.Cu * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
-mix.int_Fe <- glm(Fer.1 ~ TD.Fe * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
+mix.int_Fe <- glm(Fer.1 ~ SS.Fe * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
 mix.int_Mo <- glm(Mo ~ TD.Mo * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
 mix.int_P <- glm(P ~ TD.P * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
 mix.int_Pb <- glm(Pb ~ TD.Pb * SAMPLE_DESCRIPTOR, data = COMPARTMENTS, family=gaussian)
@@ -135,7 +135,7 @@ plotGLM_Cu <- ggplot(mix.int_Cu, aes(TD.Cu, Cu, col = as.factor(SAMPLE_DESCRIPTO
 
 plotGLM_Cu
 
-plotGLM_Fe <- ggplot(mix.int_Fe, aes(TD.Fe, Fer.1, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
+plotGLM_Fe <- ggplot(mix.int_Fe, aes(SS.Fe, Fer.1, col = as.factor(SAMPLE_DESCRIPTOR)))+ 
   geom_point(aes(color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), shape=21, size=4, stroke=2)+
   scale_shape_manual(values=c(21))+
   scale_color_manual(values=c("black","black","black"), name  ="Compartment",labels=c("Eplilithon", "Epiphites", "Filamentous"))+
@@ -145,7 +145,7 @@ plotGLM_Fe <- ggplot(mix.int_Fe, aes(TD.Fe, Fer.1, col = as.factor(SAMPLE_DESCRI
        y= "Fe Content (\u00b5g/g)")+
   theme(axis.text=element_text(size=12),
         axis.title=element_text(size=14,face="bold"))+
-  geom_smooth(aes(x=TD.Fe, y=Fer.1, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
+  geom_smooth(aes(x=SS.Fe, y=Fer.1, group = as.factor(SAMPLE_DESCRIPTOR), color=SAMPLE_DESCRIPTOR, fill=SAMPLE_DESCRIPTOR), 
               method="glm", 
               formula = y ~ x, 
               method.args=list(family="gaussian")) 

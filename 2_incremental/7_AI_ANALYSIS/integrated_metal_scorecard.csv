@@ -1,0 +1,13 @@
+"Metal","Max_Tissue_Conc","Bioavail_Score","Uptake_Strategy","Correlation_Score","BCF_Category","Interaction_Impact","Strongest_Interaction","Compartment_Specialization","Management_Priority","Tissue_hierarchy","Pct_Dissolved","Strong_correlations"
+"Zn",23.66967,"Low","Particulate-Enhanced","Moderate","Very High","Minor","Moderate","Extreme","Critical","EPIP > EPIL > FILA",31.8,4
+"Fe",15.09281,"Very Low","Inefficient Dissolved-Only","Moderate","Very High","Minor","Weak","Low","Critical","EPIP > EPIL > FILA",1.6,2
+"Mn",4.39005,"Moderate","Pure Dissolved Strategy","Strong","Moderate","Significant","EPIL→EPIP (+206.0%)","Low","Moderate","EPIL > EPIP > FILA",40.5,3
+"Cu",0.42448,"Low","True Mixed Strategy","Very Strong","Moderate","Minor","Moderate","Low","Moderate","EPIL > EPIP > FILA",32.7,4
+"Pb",0.06142,"Very Low","Inefficient Dissolved-Only","Strong","Moderate","Minor","Moderate","Low","Moderate","EPIL > EPIP > FILA",14,6
+"As",0.03077,"Very High","Dissolved-Dominant Mixed","Moderate","Very Low","Major","FILA→EPIP (+515.2%)","Low","Low","EPIL > EPIP > FILA",87.7,3
+"Co",0.02962,"Moderate","True Mixed Strategy","Moderate","High","Minor","Moderate","High","Moderate","EPIP > EPIL > FILA",42.5,2
+"Cr",0.02421,"Low","Pure Dissolved Strategy","Moderate","Moderate","Minor","Weak","Low","Low","EPIP > EPIL > FILA",37,1
+"Ni",0.01628,"High","Dissolved-Dominant Mixed","Moderate","Low","Minor","Moderate","Low","Low","EPIL > EPIP > FILA",61.7,1
+"Se",0.00672,"Moderate","Pure Dissolved Strategy","Strong","Low","Minor","Weak","Low","Low","EPIP > EPIL > FILA",41.6,2
+"Cd",0.00328,"Moderate","True Mixed Strategy","Very Strong","Moderate","Notable","FILA→EPIL (-27.5%)","Low","Low","EPIL > EPIP > FILA",45.1,8
+"Mo",0.00304,"Very High","Paradoxical Dissolved-Dominant","Strong","Very Low","Game-Changer","EPIL↔EPIP (+739.8%)","Low","Low","EPIL > EPIP > FILA",82.1,9

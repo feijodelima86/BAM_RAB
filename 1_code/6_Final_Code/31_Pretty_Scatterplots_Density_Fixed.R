@@ -8,8 +8,9 @@ names(alldata)
 
 # Selecting variables
 
-n<-6
-n2<-22 #(As:13 Cd:19,Cu:22 Fe_r234:25, Pb:34, Zn:49)
+n<-8
+n2<-20 #(As:14 Cd:20,Cu:23 Fe_r234:26, Pb:35, Zn:50)
+
 
 #Names of axes
 
@@ -29,12 +30,12 @@ dfFILA <- alldata[which(alldata$SAMPLE_DESCRIPTOR == "FILA"),]
 
 #Graphical paramenters
 
-BW1<-7     #Smoothing for x axis dispersion
-BW2<-0.006      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
+BW1<-6     #Smoothing for x axis dispersion
+BW2<-0.0006      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
 #BW2<-0.007      #Smoothing for y axis dispersion (As:0.009 Cd:0.0004,Cu:0.035,Fe:1.5, Pb:0.006, Zn:2)
 ALPHA<-0.6  #Transparency of dispersion curves
 
-dev.new()
+#dev.new()
 
 #Matrix layout for plots
 
@@ -43,7 +44,7 @@ layout(matrix(c(1,3,3,1,3,3,0,2,2),ncol=3), c(3.5,1), c(1,3))
 layout.show(n=3)
 #Plot1
 
-par(mar=c(0.5, 4.5, 0.5, 0.5))
+par(mar=c(0, 7, 0.5, 1))
 
 plot(density(dfEPIP[,n], na.rm = TRUE, bw = BW1), 
      xlim = range(alldata[,n],na.rm=TRUE), 
@@ -62,7 +63,7 @@ plot(density(dfEPIP[,n], na.rm = TRUE, bw = BW1),
 aty <- seq(0.0, max(c(density(dfEPIP[,n], na.rm = TRUE, bw = BW1)$y,
                       density(dfEPIL[,n], na.rm = TRUE, bw = BW1)$y,
                       density(dfFILA[,n], na.rm = TRUE, bw = BW1)$y)), length.out=5)
-axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1)
+axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1.3)
 
 polygon(density(dfEPIP[,n], na.rm = TRUE, bw = BW1), 
         xlim = range(alldata[,n],na.rm=TRUE), 
@@ -96,7 +97,7 @@ x3 <- dnFILA$y
 y3 <- dnFILA$x
 
 
-par(mar=c(4.5, 0.5, 0.5, 0.5))
+par(mar=c(6.0, 0, 1, 0.5))
 
 plot(density(dfEPIP[,n2], na.rm = TRUE, bw = BW1)$y, 
      xlim = c(0.000,max(c(x1,x2,x3))), 
@@ -139,15 +140,13 @@ box(lwd=2)
 
 aty1 <- seq(0.0, max(c(x1,x2,x3)), length.out=5)
 
-axis(side = 1, at = aty1, labels=format(aty1, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1)
+axis(side = 1, at = aty1, labels=format(aty1, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1.3)
 
 #Plot 3
 
+#dev.new()
 
-
-dev.new()
-
-par(mar=c(5, 6, 3, 3))
+par(mar=c(6, 7, 1, 1))
 
 plot(alldata[,n], alldata[,n2], 
      ylim = range(alldata[,n2],na.rm=TRUE),
@@ -162,11 +161,11 @@ plot(alldata[,n], alldata[,n2],
 )
 
 aty <- seq(0, max(alldata[,n2], na.rm=TRUE), length.out=5)
-axis(side = 1, at = seq(0, 200, length.out=5), las=1, font.axis=2, cex.axis=1)
-axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1)
+axis(side = 1, at = seq(0, 200, length.out=5), las=1, font.axis=2, cex.axis=1.5)
+axis(side = 2, at = aty, labels=format(aty, scientific=F,digits = 1), las=1, font.axis=2, cex.axis=1.5)
 
-title(xlab=Xlabel, line=3, cex.lab=1.5, family="Calibri")
-title(ylab=Ylabel, line=3, cex.lab=1.5, family="Calibri")
+title(xlab=Xlabel, line=4, cex.lab=2, family="Calibri")
+title(ylab=Ylabel, line=5, cex.lab=2, family="Calibri")
 
 
 points(dfEPIL[,n], dfEPIL[,n2],pch=23, cex=2,col="black", bg='darkolivegreen4',lwd=3)

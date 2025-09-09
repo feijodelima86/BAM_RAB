@@ -10,24 +10,25 @@ library("splines")
 library("effects")
 library("mgcv")
 
-COMPARTMENTS <- read.csv("2_incremental/water5.csv")
+COMPARTMENTS <- read.csv("2_incremental/230801_Water_Metals_Size_diff.csv")
 
-colnames(COMPARTMENTS)[c(2:3)]<-c("SAMPLING_DATE","SITE")
+colnames(COMPARTMENTS)[c(2:3)]<-c("SITE","SAMPLING_DATE")
 
 COMPARTMENTS$SITE <- factor(COMPARTMENTS$SITE, labels = c("WS","DL","GR","GC","BG","BN"))
 
+COMPARTMENTS$SAMPLING_DATE <- as.Date(COMPARTMENTS$SAMPLING_DATE)
 
 #Selected site 
 
-ssite<-"WS"
+ssite<-"GC"
 
 # Selected element
 
 names(COMPARTMENTS)
 
-# P= 4 Cd = 12 Fe= 6 As = 9
+#As = 121
 
-n1<-12
+n1<-123
 
 mult=1
 
@@ -37,8 +38,8 @@ j=2
 
 # Summary frames for each size fraction
 
-TD.SUM<-data.frame(aggregate(as.numeric(COMPARTMENTS[,n1+20]) ~ SAMPLING_DATE+SITE, COMPARTMENTS, mean))
-CL.SUM<-data.frame(aggregate(as.numeric(COMPARTMENTS[,n1+10]) ~ SAMPLING_DATE+SITE, COMPARTMENTS, mean))
+TD.SUM<-data.frame(aggregate(as.numeric(COMPARTMENTS[,n1+66]) ~ SAMPLING_DATE+SITE, COMPARTMENTS, mean))
+CL.SUM<-data.frame(aggregate(as.numeric(COMPARTMENTS[,n1+33]) ~ SAMPLING_DATE+SITE, COMPARTMENTS, mean))
 SS.SUM<-data.frame(aggregate(as.numeric(COMPARTMENTS[,n1]) ~ SAMPLING_DATE+SITE, COMPARTMENTS, mean))
 
 ALL.wSUM<-list(TD.SUM,CL.SUM,SS.SUM)
@@ -92,6 +93,8 @@ plot(ALL.wSUM[,1], ALL.wSUM[,5],
      xlab = NA,
      cex.lab=1, cex.axis=1.2, cex.main=1.2, cex.sub=1.2,
 )
+
+
 
 
 axis(side = 2, las=1, font.axis=2, cex.axis=2)

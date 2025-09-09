@@ -1,0 +1,7 @@
+"Uptake_Strategy","Metals","Count","Avg_Correlation_Strength","Avg_Strong_Correlations"
+"True Mixed Strategy","Cu, Co, Cd",3,4.3,4.7
+"Paradoxical Dissolved-Dominant","Mo",1,4,9
+"Pure Dissolved Strategy","Mn, Cr, Se",3,3.7,2
+"Inefficient Dissolved-Only","Fe, Pb",2,3.5,4
+"Dissolved-Dominant Mixed","As, Ni",2,3,2
+"Particulate-Enhanced","Zn",1,3,4

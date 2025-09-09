@@ -112,5 +112,5 @@ plot_4a<-gbm.plot(UCFR.SS.tc5.lr002, write.title = F, nplots = 3, plot.layout= c
                   y.label = NA
 )
 
-gbm.plot.fits(UCFR.SS.tc5.lr002, plot.layout= c(1,3))
+gbm.plot.fits(UCFR.SS.tc5.lr002)
 

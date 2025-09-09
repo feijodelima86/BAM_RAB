@@ -1,0 +1,6 @@
+"Primary_Chemical_Form","N_Interactions","Metals","Avg_Effect_Size","Max_Effect","Interaction_Types"
+"Other",6,"Co, Cr, Mo",253.2,739.8,"Facilitation"
+"Dissolved-only preference",4,"Mn, Se",149.5,206,"Facilitation"
+"Mixed dissolved + colloidal",5,"As, Cd",127.8,281.4,"Facilitation, Competition"
+"Particulate pathways",4,"Zn",92.7,167.1,"Facilitation, Competition"
+"Biologically regulated",8,"Fe, Ni",87.7,165.1,"Facilitation, Competition"

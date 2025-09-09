@@ -1,0 +1,4 @@
+"Comparison","N_Metals","Avg_N_Total","Avg_R_Clean","Avg_R2_Clean","Strong_Correlations","Total_Outliers","Avg_Outliers_Per_Metal"
+"EPIL vs EPIP",12,18,0.567,0.342,10,17,1.4
+"EPIL vs FILA",12,23,0.401,0.218,5,12,1
+"FILA vs EPIP",12,18,0.345,0.144,2,18,1.5

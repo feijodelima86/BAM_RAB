@@ -27,9 +27,9 @@ Cd_TRD<-Cd_TRD[Cd_TRD$OM>0,]
 
 #Cd_TRD$Cd_TRD <- log10(Cd_TRD$Cd_TRD+1)
 
-#Cd_TRD$Cd <- log10(Cd_TRD$Cd+1)
+Cd_TRD$Cd <- log10(Cd_TRD$Cd+1)
 
-#Cd_TRD$OM <- log10(Cd_TRD$OM+1)
+Cd_TRD$OM <- log10(Cd_TRD$OM+1)
 
 
 for (col in colnames(Cd_TRD[,c(1)])) {
@@ -43,7 +43,7 @@ UCFR.SS.tc5.lr002 <- gbm.step(data=Cd_TRD,
                               gbm.x = c(2,3,4),
                               gbm.y = 5,
                               family = "gaussian",
-                              tree.complexity = 2,
+                              tree.complexity = 5,
                               learning.rate = 0.002,
                               bag.fraction = 0.75
 )
